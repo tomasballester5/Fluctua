@@ -22,7 +22,7 @@ const juegos = {
     nombre: "Circuitos",
     imagen: "Circuito.png",
     descripcion: "Conectá los cables correctamente para activar el circuito. Un desafío de lógica y precisión.",
-    link: "../Circuito/index.html"
+    link: "../Circuito/Circuitos.html"
   },
   snake: {
     nombre: "Serpiente",
@@ -88,3 +88,4 @@ function selectGame(id) {
     <button class="play-btn" onclick="window.location.href='${game.link}'">JUGAR</button>
   `;
 }
+
