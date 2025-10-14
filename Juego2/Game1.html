@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brick Breaker - Fluctua</title>
+  <link rel="stylesheet" href="Game1style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <header>
+    <img src="Fluctua_Logo.png" alt="Fluctua Logo" class="logo" onclick="window.location.href='../Principal.html'">
+    <h1>Brick Breaker</h1>
+  </header>
+
+  <main>
+    <section class="game-container">
+      <canvas id="gameCanvas" width="700" height="500"></canvas>
+
+      <div class="sidebar">
+        <div class="info-box">
+          <h3>Puntaje</h3>
+          <p id="score">0</p>
+        </div>
+        <div class="info-box">
+          <h3>Vidas</h3>
+          <p id="lives">3</p>
+        </div>
+        <div class="info-box">
+          <h3>Powerups</h3>
+          <div id="activePowerups"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="Game1script.js"></script>
+</body>
+</html>

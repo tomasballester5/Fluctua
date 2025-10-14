@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fluctua - Acerca de</title>
+  <link rel="stylesheet" href="acercadestyle.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="../Principal/Fluctua_Logo.png" alt="Fluctua" class="logo" onclick="goHome()">
+      <div class="top-buttons">
+        <button id="btn-minijuegos" class="top-btn" onclick="goTo('Principal/Principal.html')">Minijuegos</button>
+        <button id="btn-acercade" class="top-btn active">Acerca de</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="about-container">
+      <img src="../Principal/Fluctua_Logo.png" alt="Fluctua" class="about-logo">
+      <p class="about-text">
+        Fluctua es una Tienda de Instrumentos Electrónicos cuyo propósito es ofrecerle al cliente una experiencia inmersiva y agradable, para que genere en ellos comodidad y que se sientan a gusto con nosotros. 
+        Ofrecemos una atención impecable, con nuestros empleados que siempre buscarán que tu compra sea más que satisfactoria, y así llegar justo a lo que necesitabas. 
+        Para mejorar tu experiencia ofrecemos juegos simples con los que, si completas todos, podrás conseguir stickers de nuestra marca.
+        <br><br>
+        Mucha suerte, esperemos que disfrutes la experiencia y te lleves justo lo que necesitabas para hacer sonar las fluctuaciones de tu felicidad.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    function goHome() {
+      window.location.href = "../Principal/Principal.html";
+    }
+
+    function goTo(path) {
+      window.location.href = "../" + path;
+    }
+  </script>
+</body>
+</html>

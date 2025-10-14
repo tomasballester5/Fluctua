@@ -1,0 +1,76 @@
+:root {
+  --bg: #1b1c1c;
+  --text: #eaeef4;
+  --accent: #e53935;
+  --muted: #a7b0ba;
+  --panel: #1b1c1c;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "Montserrat", sans-serif;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px;
+}
+
+.logo {
+  width: 150px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.logo:hover {
+  transform: scale(1.1);
+}
+
+h1 {
+  font-size: 2rem;
+  color: var(--accent);
+}
+
+.game-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+canvas {
+  background: linear-gradient(180deg, #111418, #0c0e10);
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+}
+
+.sidebar {
+  background-color: var(--panel);
+  padding: 20px;
+  border-radius: 12px;
+  width: 180px;
+  box-shadow: 0 0 10px rgba(229, 57, 53, 0.3);
+}
+
+.info-box {
+  margin-bottom: 20px;
+  text-align: center;
+  background-color: #14171b;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+#activePowerups svg {
+  width: 24px;
+  height: 24px;
+  margin: 5px;
+}

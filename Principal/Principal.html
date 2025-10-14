@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fluctua - Principal</title>
+  <link rel="stylesheet" href="principalstyle.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="Fluctua_Logo.png" alt="Fluctua" class="logo" onclick="goHome()">
+      <div class="top-buttons">
+        <button id="btn-minijuegos" class="top-btn active" onclick="selectTopButton('minijuegos')">Minijuegos</button>
+        <button id="btn-acercade" class="top-btn" onclick="selectTopButton('acercade')">Acerca de</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="menu-container">
+      <div class="game-grid">
+        <!-- Nota: las rutas de las imágenes son relativas a este archivo Principal.html -->
+        <div class="game-card" id="card-circuito" onclick="selectGame('circuito')">
+        
+          <h3>Circuitos</h3>
+        </div>
+
+        <div class="game-card" id="card-snake" onclick="selectGame('snake')">
+      
+          <h3>Serpiente</h3>
+        </div>
+
+        <div class="game-card" id="card-brick" onclick="selectGame('brick')">
+          
+          <h3>Brick Breaker</h3>
+        </div>
+
+        <div class="game-card" id="card-maze" onclick="selectGame('maze')">
+          
+          <h3>Fluctua Maze</h3>
+        </div>
+      </div>
+
+      <div class="game-info" id="game-info">
+        <div class="placeholder">
+          <p>Seleccioná un juego para ver los detalles</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="principalscript.js"></script>
+</body>
+</html>
