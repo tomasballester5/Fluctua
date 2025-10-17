@@ -125,20 +125,4 @@ html,body{height:100%;background:var(--bg);font-family: "Montserrat", system-ui,
   font-weight: 600;
   color: #ededf4;
 }
-const gameCanvas = document.getElementById('gameCanvas');
-
-// Movimiento con mouse
-gameCanvas.addEventListener('mousemove', (e) => {
-  moverJugador(e.offsetX, e.offsetY);
-});
-
-// Movimiento con tacto
-gameCanvas.addEventListener('touchmove', (e) => {
-  e.preventDefault(); // evita el scroll de la página
-  const touch = e.touches[0];
-  const rect = gameCanvas.getBoundingClientRect();
-  const x = touch.clientX - rect.left;
-  const y = touch.clientY - rect.top;
-  moverJugador(x, y);
-}, { passive: false });
 
