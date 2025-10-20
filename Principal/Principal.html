@@ -1,57 +1,40 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fluctua - Principal</title>
-  <link rel="stylesheet" href="principalstyle.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-</head>
-<body>
-  <header>
-    <div class="logo-container">
-      <img src="Fluctua_Logo.png" alt="Fluctua" class="logo" onclick="goHome()">
-      <div class="top-buttons">
-        <button id="btn-minijuegos" class="top-btn active" onclick="selectTopButton('minijuegos')">Minijuegos</button>
-        <button id="btn-acercade" class="top-btn" onclick="selectTopButton('acercade')">Acerca de</button>
-      </div>
+<!DOCTYPE html> 
+<html lang="es"> 
+  <head> <meta charset="UTF-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+    <title>Fluctua - Principal</title> 
+    <link rel="stylesheet" href="principalstyle.css" /> 
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet"> 
+  </head> 
+  <body> 
+    <!-- Fondo animado --> 
+    <div class="animated-bg"></div> <!-- Pantalla de inicio --> 
+    <section id="intro" class="intro-screen"> 
+      <img src="Fluctua_Logo.png" alt="Fluctua" class="intro-logo"> 
+      <p class="intro-text"> 
+        Fluctua es una Tienda de Instrumentos Electrónicos cuyo propósito es ofrecerle al cliente una experiencia inmersiva y agradable, para que genere en ellos comodidad y que se sientan a gusto con nosotros. Ofrecemos una atención impecable, con nuestros empleados que siempre buscarán que tu compra sea más que satisfactoria, y así llegar justo a lo que necesitabas. Para mejorar tu experiencia ofrecemos juegos simples con los que, si completas todos, podrás conseguir stickers de nuestra marca. <br><br> Mucha suerte, esperemos que disfrutes la experiencia y te lleves justo lo que necesitabas para hacer sonar las fluctuaciones de tu felicidad. </p> <button id="btn-continuar" class="continue-btn">Continuar</button> </section> <!-- Pantalla principal --> <main id="main-content" class="main hidden"> <div class="game-grid"> <div class="game-card"> <img src="circuitosgame.png" alt="Circuitos" class="card-bg"> <div class="overlay"> <h3>Circuitos</h3> <p>Conectá los cables correctamente para activar el circuito. Un desafío de lógica y precisión.</p> 
+  <button class="play-btn" onclick="window.location.href='../Circuito/circuito.html'">Jugar</button> 
+</div> 
+</div>
+  <div class="game-card">
+    <img src="serpientegame.png" alt="Serpiente" class="card-bg">
+    <div class="overlay">
+      <h3>Serpiente</h3>
+      <p>Controlá la serpiente, comé los puntos y evitá chocar contigo mismo. ¡Un clásico moderno!</p>
+      <button class="play-btn" onclick="window.location.href='../Juego_serpiente/Snake.html'">Jugar</button>
     </div>
-  </header>
+  </div>
 
-  <main>
-    <section class="menu-container">
-      <div class="game-grid">
-        <!-- Nota: las rutas de las imágenes son relativas a este archivo Principal.html -->
-        <div class="game-card" id="card-Circuito" onclick="selectGame('Circuito')">
-        
-          <h3>Circuito</h3>
-        </div>
-
-        <div class="game-card" id="card-snake" onclick="selectGame('snake')">
-      
-          <h3>Serpiente</h3>
-        </div>
-
-        <div class="game-card" id="card-brick" onclick="selectGame('brick')">
-          
-          <h3>Brick Breaker</h3>
-        </div>
-
-        <div class="game-card" id="card-maze" onclick="selectGame('maze')">
-          
-          <h3>Fluctua Maze</h3>
-        </div>
-      </div>
-
-      <div class="game-info" id="game-info">
-        <div class="placeholder">
-          <p>Seleccioná un juego para ver los detalles</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script src="principalscript.js"></script>
-</body>
+  <div class="game-card">
+    <img src="brickgame.png" alt="Brick Breaker" class="card-bg">
+    <div class="overlay">
+      <h3>Brick Breaker</h3>
+      <p>Destruí los ladrillos con la pelota. ¡Demostrá tu precisión y reflejos!</p>
+      <button class="play-btn" onclick="window.location.href='../Juego2/Game1.html'">Jugar</button>
+    </div>
+  </div>
+</div>
+</main> 
+    <script src="principalscript.js"></script> 
+  </body> 
 </html>
-
