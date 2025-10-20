@@ -6,16 +6,22 @@ function selectTopButton(section) {
   const minijuegosBtn = document.getElementById("btn-minijuegos");
   const acercadeBtn = document.getElementById("btn-acercade");
 
+  // Quita estado activo de ambos
   minijuegosBtn.classList.remove("active");
   acercadeBtn.classList.remove("active");
 
+  // Activa el botón seleccionado
   if (section === "minijuegos") {
     minijuegosBtn.classList.add("active");
-  } else {
+  } else if (section === "acercade") {
     acercadeBtn.classList.add("active");
+    // Redirige a la página Acerca de
     window.location.href = "../Acerca_de/acercade.html";
+      document.querySelectorAll('.top-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`btn-${btn}`).classList.add('active');
   }
 }
+
 
 const juegos = {
   circuito: {
@@ -63,16 +69,9 @@ function selectGame(id) {
   document.getElementById(`card-${id}`).classList.add('selected');
 }
 
-function selectTopButton(btn) {
-  document.querySelectorAll('.top-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(`btn-${btn}`).classList.add('active');
-}
-
 function goHome() {
   window.location.href = "Principal.html";
 }
-
-
 
 function selectGame(id) {
   document.querySelectorAll(".game-card").forEach(card => card.classList.remove("active"));
@@ -88,5 +87,3 @@ function selectGame(id) {
     <button class="play-btn" onclick="window.location.href='${game.link}'">JUGAR</button>
   `;
 }
-
-
