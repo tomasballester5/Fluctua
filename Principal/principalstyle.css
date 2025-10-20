@@ -1,262 +1,180 @@
 :root {
-    --bg: #0c0e10;
-    --text: #eaeef4;
-    --muted: #a7b0ba;
-    --accent: #e53935;
-    --ok: #7CFF6B;
-  }
-  
-  * {
-    box-sizing: border-box;
-    font-family: "Montserrat", sans-serif;
-    transition: all 0.25s ease;
-  }
-  
-  body {
-    background-color: var(--bg);
-    color: var(--text);
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 2rem;
-  }
-  
-  .logo-container {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-  
-  .logo {
-    height: 50px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  .logo:hover {
-    transform: scale(1.05);
-  }
-  
-  .top-buttons {
-    display: flex;
-    gap: 0.8rem;
-  }
-  
-  .top-btn {
-    background: transparent;
-    color: var(--text);
-    border: 2px solid var(--muted);
-    padding: 0.6rem 1.2rem;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  
-  .top-btn.active, .top-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  
-  main {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 2rem;
-  }
-  
-  .menu-container {
-    display: flex;
-    gap: 2rem;
-    width: 90%;
-    max-width: 1300px;
-  }
-  
-  .game-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    flex: 1;
-  }
-  
-  .game-card {
-    background-color: #1a1f24;
-    border-radius: 15px;
-    border: 2px solid transparent;
-    height: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-  }
-  .game-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-5px);
-  }
-  
-  .game-card.active {
-    border-color: var(--accent);
-    background-color: #1f262c;
-  }
-  
-  .game-info {
-    flex: 1;
-    background-color: #1a1f24;
-    border-radius: 15px;
-    padding: 1.5rem;
-    border: 2px solid var(--muted);
-    min-height: 350px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-  }
-  
-  .placeholder {
-    opacity: 0.6;
-    font-size: 1rem;
-  }
-  
-  .game-preview {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-  }
-  
-  .play-btn {
-    background-color: var(--accent);
-    color: var(--text);
-    border: none;
-    padding: 0.8rem 2rem;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 1rem;
-    transition: 0.25s;
-  }
-  .play-btn:hover {
-    transform: scale(1.05);
-    background-color: #ff4747;
-  }
-  /* === Animación hover === */
-.card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+--bg: #0c0e10;
+--text: #eaeef4;
+--accent: #e53935;
 }
 
-.card:hover {
-  transform: translateY(-10px) scale(1.05);
-  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+/* Fondo animado wavy */
+.animated-bg {
+position: fixed;
+inset: 0;
+background: radial-gradient(circle at 30% 30%, rgba(229,57,53,0.08), transparent 60%),
+radial-gradient(circle at 70% 70%, rgba(255,255,255,0.04), transparent 60%);
+animation: waveMove 12s linear infinite alternate;
+filter: blur(80px);
+z-index: -1;
 }
-/* === Hover suave para .game-card y miniatura === */
+@keyframes waveMove {
+0% { transform: translate(0, 0) scale(1); }
+100% { transform: translate(-20%, -10%) scale(1.1); }
+}
+
+body {
+margin: 0;
+font-family: "Montserrat", sans-serif;
+color: var(--text);
+background-color: var(--bg);
+overflow-x: hidden;
+}
+
+/* --- Intro --- */
+.intro-screen {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+height: 100vh;
+padding: 0 20px;
+opacity: 0;
+animation: fadeIn 1.5s forwards;
+}
+
+.intro-logo {
+width: 260px;
+margin-bottom: 20px;
+opacity: 0;
+transform: translateY(-20px);
+animation: fadeUp 1.6s forwards 0.3s;
+}
+
+.intro-text {
+max-width: 700px;
+line-height: 1.6;
+color: #ddd;
+opacity: 0;
+animation: fadeIn 1.8s forwards 1s;
+}
+
+.continue-btn {
+margin-top: 30px;
+padding: 12px 28px;
+border: none;
+border-radius: 25px;
+font-size: 1rem;
+font-weight: 600;
+color: var(--text);
+background-color: var(--accent);
+cursor: pointer;
+opacity: 0;
+transform: translateY(10px);
+animation: fadeUp 1.6s forwards 2s;
+transition: background 0.3s ease, transform 0.2s ease;
+}
+.continue-btn:hover {
+background-color: #ff5252;
+transform: scale(1.05);
+}
+
+/* --- Main section --- */
+.hidden {
+display: none;
+}
+
+.main {
+padding: 60px 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+opacity: 0;
+transition: opacity 0.8s ease;
+}
+
+.game-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+gap: 40px;
+width: 90%;
+max-width: 1100px;
+}
+
 .game-card {
-  transition: transform 0.28s cubic-bezier(.2,.9,.2,1), box-shadow 0.28s ease;
-  will-change: transform;
+position: relative;
+border-radius: 20px;
+overflow: hidden;
+box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+cursor: pointer;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .game-card:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 14px 30px rgba(229,43,63,0.12);
+transform: translateY(-6px);
+box-shadow: 0 10px 25px rgba(229,57,53,0.2);
 }
 
-/* si querés que solo la imagen escale (opcional) */
-.card-thumb {
-  display: block;
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  transition: transform 0.28s cubic-bezier(.2,.9,.2,1);
+.card-bg {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+transition: transform 0.4s ease;
 }
-.game-card:hover .card-thumb {
-  transform: scale(1.05);
-}
-/* ==== Tarjetas de juego ==== */
-.game-card {
-  transition: transform 0.28s cubic-bezier(.2,.9,.2,1), box-shadow 0.28s ease;
-  will-change: transform;
-  cursor: pointer;
+.game-card:hover .card-bg {
+transform: scale(1.08);
 }
 
-.game-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 12px 20px rgba(229,43,63,0.12);
+.overlay {
+position: absolute;
+inset: 0;
+display: flex;
+flex-direction: column;
+justify-content: flex-end;
+padding: 20px;
+background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.7) 100%);
 }
 
-/* ==== Panel derecho (info del juego) ==== */
-.game-info {
-  background-color: #1b1c1c;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 20px;
-  min-height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.25s ease;
+.overlay h3 {
+margin: 0;
+color: var(--accent);
+font-size: 1.3rem;
 }
 
-.game-preview {
-  text-align: center;
-  max-width: 320px;
-  margin: 0 auto;
+.overlay p {
+font-size: 0.9rem;
+color: #ccc;
+line-height: 1.4;
+margin-top: 6px;
 }
 
-.info-image {
-  width: 200px;
-  height: auto;
-  border-radius: 10px;
-  margin-bottom: 15px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease;
-}
-
-.info-image:hover {
-  transform: scale(1.05);
-}
-
-.game-preview h2 {
-  font-size: 1.4rem;
-  margin-bottom: 10px;
-  color: #fff;
-}
-
-.game-preview p {
-  color: #ccc;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  margin-bottom: 20px;
-}
-
-/* Botón jugar */
 .play-btn {
-  background-color: #e52b3f;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.25s ease, transform 0.25s ease;
+margin-top: 10px;
+padding: 8px 18px;
+background-color: var(--accent);
+border: none;
+border-radius: 10px;
+color: var(--text);
+font-weight: 600;
+cursor: pointer;
+align-self: start;
+transition: background 0.25s ease;
 }
-
 .play-btn:hover {
-  background-color: #ff475a;
-  transform: translateY(-2px);
+background-color: #ff4747;
 }
 
-/* Selección del juego */
-.game-card.selected {
-  border: 2px solid #e52b3f;
+/* Animaciones */
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+.intro-text { font-size: 0.9rem; }
+.intro-logo { width: 200px; }
+.game-grid { gap: 25px; }
 }
