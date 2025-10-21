@@ -340,15 +340,3 @@ padButtons.forEach(btn => {
   }, { passive: false });
 });
 
-const canvas = document.querySelector("canvas");
-const ctx = canvas.getContext("2d");
-
-function ajustarCanvas() {
-  // Obtener el ancho visible del contenedor
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = rect.height;
-}
-
-window.addEventListener("resize", ajustarCanvas);
-ajustarCanvas();
