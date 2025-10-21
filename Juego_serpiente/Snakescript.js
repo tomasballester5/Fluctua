@@ -3,25 +3,7 @@
 
 // ====== CONFIG ======
 const canvas = document.getElementById('gameCanvas');
-// 🔧 Ajuste automático del canvas al tamaño de pantalla
-function resizeCanvas() {
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = window.innerWidth * dpr;
-  canvas.height = window.innerHeight * dpr;
-  ctx.scale(dpr, dpr);
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
 const ctx = canvas.getContext('2d');
-// === ADAPTAR CANVAS A PANTALLA ===
-function resizeCanvas() {
-  // Se ajusta al tamaño del dispositivo
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas(); // inicial
 const foodIcon = document.getElementById('foodIcon');
 const scoreEl = document.getElementById('score');
 const speedDisplay = document.getElementById('speedDisplay');
@@ -36,8 +18,8 @@ btnMenu.onclick = () => window.location.href = '../Principal/Principal.html';
 btnAcerca.onclick = () => window.location.href = '../Acerca_de/acercade.html';
 
 const CELL = 20;
-let WIDTH = canvas.width;
-let HEIGHT = canvas.height;
+const WIDTH = canvas.width;
+const HEIGHT = canvas.height;
 let GAME_RUNNING = false;
 let GAME_OVER = false;
 
@@ -339,37 +321,3 @@ resetGame();
 placeFood();
 render();
 updateUI();
-
-// ====== CONTROLES TÁCTILES ======
-let touchStartX = 0;
-let touchStartY = 0;
-let touchEndX = 0;
-let touchEndY = 0;
-
-canvas.addEventListener("touchstart", e => {
-  touchStartX = e.changedTouches[0].screenX;
-  touchStartY = e.changedTouches[0].screenY;
-}, {passive: true});
-
-canvas.addEventListener("touchend", e => {
-  touchEndX = e.changedTouches[0].screenX;
-  touchEndY = e.changedTouches[0].screenY;
-  handleSwipe();
-}, {passive: true});
-
-function handleSwipe() {
-  const dx = touchEndX - touchStartX;
-  const dy = touchEndY - touchStartY;
-
-  // Determina la dirección dominante del gesto
-  if (Math.abs(dx) > Math.abs(dy)) {
-    // movimiento horizontal
-    if (dx > 30 && dir.x !== -1) nextDir = { x: 1, y: 0 }; // derecha
-    else if (dx < -30 && dir.x !== 1) nextDir = { x: -1, y: 0 }; // izquierda
-  } else {
-    // movimiento vertical
-    if (dy > 30 && dir.y !== -1) nextDir = { x: 0, y: 1 }; // abajo
-    else if (dy < -30 && dir.y !== 1) nextDir = { x: 0, y: -1 }; // arriba
-  }
-}
-
