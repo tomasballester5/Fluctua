@@ -31,6 +31,16 @@
     <div class="game" role="application" aria-label="Snake — Fluctua">
       <div class="canvas-wrap" id="canvasWrap">
         <canvas id="gameCanvas" width="720" height="560" aria-label="Lienzo Snake"></canvas>
+        <!-- GAMEPAD -->
+          <div class="gamepad">
+           <div class="pad-btn up" data-dir="up">▲</div>
+            <div class="pad-row">
+            <div class="pad-btn left" data-dir="left">◀</div>
+          <div class="pad-btn right" data-dir="right">▶</div>
+        </div>
+      <div class="pad-btn down" data-dir="down">▼</div>
+</div>
+
         <!-- foodIcon will be positioned absolutely inside canvasWrap -->
         <div id="foodIcon" class="food-icon" aria-hidden="true"></div>
       </div>
@@ -49,7 +59,7 @@
         <div class="controls legend">
           <div>Controles:</div>
           <div>PC: ← ↑ → ↓ / WASD</div>
-          <div>Móvil: arrastra dedo → dirección (se elige eje más cercano)</div>
+     
           <div style="margin-top:10px">
             <button id="startBtn" class="btn primary">Iniciar (Espacio)</button>
             <button id="resetBtn" class="btn secondary">Reiniciar</button>
@@ -69,3 +79,4 @@
   <!-- render any lucide icons present (food icon inserted by JS uses lucide) -->
 </body>
 </html>
+
