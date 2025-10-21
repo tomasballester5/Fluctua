@@ -3,6 +3,16 @@
 
 // ====== CONFIG ======
 const canvas = document.getElementById('gameCanvas');
+// 🔧 Ajuste automático del canvas al tamaño de pantalla
+function resizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  ctx.scale(dpr, dpr);
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
 const ctx = canvas.getContext('2d');
 // === ADAPTAR CANVAS A PANTALLA ===
 function resizeCanvas() {
@@ -362,3 +372,4 @@ function handleSwipe() {
     else if (dy < -30 && dir.y !== 1) nextDir = { x: 0, y: -1 }; // arriba
   }
 }
+
