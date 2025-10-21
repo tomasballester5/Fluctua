@@ -92,8 +92,6 @@ function placeFood(){
   foodIcon.style.left = `${food.x}px`;
   foodIcon.style.top = `${food.y}px`;
 }
-canvas.width = window.innerWidth * 0.95;  // ancho 95% pantalla
-canvas.height = window.innerHeight * 0.5; // alto 50% pantalla
 
 // ====== REINICIAR ======
 function resetGame() {
@@ -323,36 +321,3 @@ resetGame();
 placeFood();
 render();
 updateUI();
-
-// --- 🎮 Controles táctiles por deslizamiento ---
-let startX, startY;
-
-const canvas = document.getElementById("gameCanvas");
-
-canvas.addEventListener('touchstart', (e)=>{
-    if(!GAME_RUNNING && !GAME_OVER){
-        startGame();
-    }
-    e.preventDefault();
-});
-
-let startX, startY;
-
-document.getElementById("gameCanvas").addEventListener("touchstart", e => {
-  startX = e.touches[0].clientX;
-  startY = e.touches[0].clientY;
-});
-
-document.getElementById("gameCanvas").addEventListener("touchend", e => {
-  const dx = e.changedTouches[0].clientX - startX;
-  const dy = e.changedTouches[0].clientY - startY;
-  if (Math.abs(dx) > Math.abs(dy)) {
-    mover(dx > 0 ? "right" : "left");
-  } else {
-    mover(dy > 0 ? "down" : "up");
-  }
-});
-
-
-
-
