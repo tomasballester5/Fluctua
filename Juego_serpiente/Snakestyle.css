@@ -55,10 +55,11 @@ canvas{ display:block; background:#061015; border-radius:8px; box-shadow: inset 
 
 /* MOBILE CONTROLS */
 .mobile-controls{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  bottom:14px;
+  position: relative; /* 👈 antes era absolute */
+  left: unset;
+  transform: none;
+  bottom: unset;
+  margin-top: 14px; /* 👈 agregá un poco de separación */
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -115,3 +116,4 @@ canvas{ display:block; background:#061015; border-radius:8px; box-shadow: inset 
   .canvas-wrap{ padding:8px; }
   canvas{ width: calc(100vw - 36px); height: auto; max-height: calc(100vh - 220px); }
 }
+
