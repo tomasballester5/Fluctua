@@ -358,4 +358,8 @@ padButtons.forEach(btn => {
   }, { passive: false });
 });
 
+const tileSize = 20;
+const cols = Math.floor(canvas.width / tileSize);
+const rows = Math.floor(canvas.height / tileSize);
+
 
