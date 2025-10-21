@@ -321,3 +321,21 @@ resetGame();
 placeFood();
 render();
 updateUI();
+
+// ===== GAMEPAD CONTROLS =====
+const padButtons = document.querySelectorAll(".pad-btn");
+
+padButtons.forEach(btn => {
+  btn.addEventListener("touchstart", e => {
+    e.preventDefault();
+    const dirName = btn.dataset.dir;
+    let newDir = null;
+
+    if (dirName === "up" && dir.y !== 1) newDir = { x: 0, y: -1 };
+    else if (dirName === "down" && dir.y !== -1) newDir = { x: 0, y: 1 };
+    else if (dirName === "left" && dir.x !== 1) newDir = { x: -1, y: 0 };
+    else if (dirName === "right" && dir.x !== -1) newDir = { x: 1, y: 0 };
+
+    if (newDir) nextDir = newDir;
+  }, { passive: false });
+});
