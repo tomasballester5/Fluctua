@@ -48,9 +48,11 @@ h1 {
 }
 
 canvas {
-  background: linear-gradient(180deg, #111418, #0c0e10);
-  border: 2px solid var(--accent);
-  border-radius: 10px;
+ width: 100%;
+  height: auto;
+  max-width: 800px; /* si quieres limitarlo */
+  display: block;
+  margin: 0 auto;
 }
 
 .sidebar {
@@ -74,3 +76,4 @@ canvas {
   height: 24px;
   margin: 5px;
 }
+
