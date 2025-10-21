@@ -53,8 +53,65 @@ canvas{ display:block; background:#061015; border-radius:8px; box-shadow: inset 
 .btn.primary{ background: linear-gradient(180deg,var(--accent), #ff4a59); color:white; border:none; box-shadow: 0 8px 26px rgba(229,43,63,0.12); }
 .btn.secondary{ background:transparent; border:1px solid rgba(255,255,255,0.04); }
 
+/* MOBILE CONTROLS */
+.mobile-controls{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  z-index:40;
+  pointer-events:auto;
+}
+
+/* row for left+right */
+.mobile-controls .mc-row{
+  display:flex;
+  gap:10px;
+}
+
+/* each button */
+.mc-btn{
+  width:56px;
+  height:56px;
+  border-radius:14px;
+  border:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--accent);
+  box-shadow: 0 8px 20px rgba(229,43,63,0.12);
+  transform-origin:center;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  opacity:0.92;
+  -webkit-tap-highlight-color: transparent;
+  cursor:pointer;
+}
+
+/* small visual for non-invasive: slightly translucent and smaller on larger phones */
+@media (max-width:380px){
+  .mc-btn{ width:50px; height:50px; border-radius:12px; }
+}
+
+/* pressed animation */
+.mc-btn.pressed{
+  transform: scale(0.88) translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+
+/* hide on desktop */
+@media (min-width:981px){
+  .mobile-controls{ display:none; }
+}
+
 /* responsive */
 @media (max-width:980px){
   .game{ grid-template-columns: 1fr; }
   .panel{ order:2; width:100%; }
+  /* make canvas take more visible space on mobile */
+  .canvas-wrap{ padding:8px; }
+  canvas{ width: calc(100vw - 36px); height: auto; max-height: calc(100vh - 220px); }
 }
