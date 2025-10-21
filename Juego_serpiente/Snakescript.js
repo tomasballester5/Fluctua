@@ -336,23 +336,23 @@ canvas.addEventListener('touchstart', (e)=>{
     e.preventDefault();
 });
 
-let touchStartPos = null;
-canvas.addEventListener('touchstart', e=>{
-    const t = e.touches[0];
-    touchStartPos = {x: t.clientX, y: t.clientY};
+let startX, startY;
+
+document.getElementById("gameCanvas").addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
 });
-canvas.addEventListener('touchmove', e=>{
-    if(!touchStartPos) return;
-    const t = e.touches[0];
-    const dx = t.clientX - touchStartPos.x;
-    const dy = t.clientY - touchStartPos.y;
-    if(Math.abs(dx) > Math.abs(dy)){
-        nextDir = dx>0? {x:1,y:0} : {x:-1,y:0};
-    } else {
-        nextDir = dy>0? {x:0,y:1} : {x:0,y:-1};
-    }
-    touchStartPos = {x: t.clientX, y: t.clientY};
+
+document.getElementById("gameCanvas").addEventListener("touchend", e => {
+  const dx = e.changedTouches[0].clientX - startX;
+  const dy = e.changedTouches[0].clientY - startY;
+  if (Math.abs(dx) > Math.abs(dy)) {
+    mover(dx > 0 ? "right" : "left");
+  } else {
+    mover(dy > 0 ? "down" : "up");
+  }
 });
+
 
 
 
