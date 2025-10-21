@@ -106,13 +106,15 @@ function placeFood(){
   do {
     food.x = Math.floor(Math.random() * (canvas.width / CELL)) * CELL + CELL / 2;
 food.y = Math.floor(Math.random() * (canvas.height / CELL)) * CELL + CELL / 2;
-
+    const scaleX = rect.width / canvas.width;
+const scaleY = rect.height / canvas.height;
+const rect = canvas.getBoundingClientRect();
     tries++;
     const conflict = snake.some(p => Math.hypot(p.x - food.x, p.y - food.y) < CELL*0.9);
     if(!conflict) break;
   } while(tries < 200);
-  foodIcon.style.left = `${food.x}px`;
-  foodIcon.style.top = `${food.y}px`;
+foodIcon.style.left = (rect.left + food.x * scaleX) + 'px';
+foodIcon.style.top = (rect.top + food.y * scaleY) + 'px';
 }
 
 // ====== REINICIAR ======
@@ -365,6 +367,7 @@ padButtons.forEach(btn => {
 const tileSize = 20;
 const cols = Math.floor(canvas.width / tileSize);
 const rows = Math.floor(canvas.height / tileSize);
+
 
 
 
