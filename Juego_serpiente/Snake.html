@@ -35,26 +35,29 @@
         <div id="foodIcon" class="food-icon" aria-hidden="true"></div>
 
         <!-- CONTROLES MÓVIL (solo visibles en pantallas pequeñas) -->
-        <div id="mobileControls" class="mobile-controls" aria-hidden="false">
-          <button id="mc-up" class="mc-btn" aria-label="Arriba" title="Arriba">
-            <!-- arrow up (white) inside red circle -->
-            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-              <path d="M6 15l6-6 6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-          </button>
-          <div class="mc-row">
-            <button id="mc-left" class="mc-btn" aria-label="Izquierda" title="Izquierda">
-              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-                <path d="M15 6l-6 6 6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              </svg>
-            </button>
+        <div class="game" role="application" aria-label="Snake — Fluctua">
+  <div class="canvas-wrap" id="canvasWrap">
+    <canvas id="gameCanvas" width="720" height="560" aria-label="Lienzo Snake"></canvas>
+    <div id="foodIcon" class="food-icon" aria-hidden="true"></div>
+  </div>
 
-            <button id="mc-right" class="mc-btn" aria-label="Derecha" title="Derecha">
-              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-                <path d="M9 6l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              </svg>
-            </button>
-          </div>
+  <aside class="panel" aria-hidden="false">
+    ...
+  </aside>
+</div>
+
+<!-- 👇 pegá acá los controles -->
+<div id="mobileControls" class="mobile-controls" aria-hidden="false">
+  <div class="mobile-row">
+    <button class="control-btn" id="upBtn" aria-label="Arriba">⬆️</button>
+  </div>
+  <div class="mobile-row">
+    <button class="control-btn" id="leftBtn" aria-label="Izquierda">⬅️</button>
+    <button class="control-btn" id="downBtn" aria-label="Abajo">⬇️</button>
+    <button class="control-btn" id="rightBtn" aria-label="Derecha">➡️</button>
+  </div>
+</div>
+
 
           <button id="mc-down" class="mc-btn" aria-label="Abajo" title="Abajo">
             <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
@@ -99,3 +102,4 @@
   <!-- render any lucide icons present (food icon inserted by JS uses lucide) -->
 </body>
 </html>
+
