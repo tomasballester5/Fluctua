@@ -58,3 +58,53 @@ canvas{ display:block; background:#061015; border-radius:8px; box-shadow: inset 
   .game{ grid-template-columns: 1fr; }
   .panel{ order:2; width:100%; }
 }
+/* ===== GAMEPAD ===== */
+.gamepad {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 50;
+  user-select: none;
+}
+
+.pad-row {
+  display: flex;
+  gap: 50px;
+}
+
+.pad-btn {
+  width: 70px;
+  height: 70px;
+  background: rgba(229, 57, 53, 0.1);
+  border: 2px solid rgba(229, 57, 53, 0.4);
+  border-radius: 50%;
+  color: var(--accent);
+  font-size: 26px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.15s ease;
+  box-shadow: 0 0 10px rgba(229, 57, 53, 0.1);
+  backdrop-filter: blur(6px);
+}
+
+.pad-btn:active {
+  background: var(--accent);
+  color: #fff;
+  transform: scale(0.9);
+  box-shadow: 0 0 20px rgba(229, 57, 53, 0.6);
+}
+
+/* Mostrar solo en pantallas pequeñas */
+@media (min-width: 769px) {
+  .gamepad {
+    display: none;
+  }
+}
+
