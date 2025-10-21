@@ -4,6 +4,24 @@
 // ====== CONFIG ======
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+// === Ajuste automático del tamaño del canvas ===
+function ajustarCanvas() {
+  const rect = canvas.getBoundingClientRect();
+
+  // En PC mantiene su tamaño normal (por ejemplo 800x600)
+  // En móvil se adapta al ancho visible sin deformar
+  if (window.innerWidth < 800) {
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+  } else {
+    canvas.width = 800;
+    canvas.height = 600;
+  }
+}
+
+window.addEventListener('resize', ajustarCanvas);
+ajustarCanvas();
+
 const foodIcon = document.getElementById('foodIcon');
 const scoreEl = document.getElementById('score');
 const speedDisplay = document.getElementById('speedDisplay');
@@ -339,4 +357,5 @@ padButtons.forEach(btn => {
     if (newDir) nextDir = newDir;
   }, { passive: false });
 });
+
 
