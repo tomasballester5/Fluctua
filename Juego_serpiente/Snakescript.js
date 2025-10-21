@@ -92,6 +92,8 @@ function placeFood(){
   foodIcon.style.left = `${food.x}px`;
   foodIcon.style.top = `${food.y}px`;
 }
+canvas.width = window.innerWidth * 0.95;  // ancho 95% pantalla
+canvas.height = window.innerHeight * 0.5; // alto 50% pantalla
 
 // ====== REINICIAR ======
 function resetGame() {
@@ -348,3 +350,4 @@ canvas.addEventListener("touchend", e => {
     else if (dy < -30) move("up");
   }
 });
+
