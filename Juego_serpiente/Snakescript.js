@@ -3,24 +3,17 @@
 
 // ====== CONFIG ======
 const canvas = document.getElementById('gameCanvas');
+const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
-// === Ajuste automático del tamaño del canvas ===
-function ajustarCanvas() {
-  const rect = canvas.getBoundingClientRect();
 
-  // En PC mantiene su tamaño normal (por ejemplo 800x600)
-  // En móvil se adapta al ancho visible sin deformar
-  if (window.innerWidth < 800) {
-    canvas.width = rect.width;
-    canvas.height = rect.height;
-  } else {
-    canvas.width = 800;
-    canvas.height = 600;
-  }
+function resizeCanvas() {
+  const size = Math.min(window.innerWidth * 0.9, 700);
+  canvas.width = size;
+  canvas.height = size;
 }
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
-window.addEventListener('resize', ajustarCanvas);
-ajustarCanvas();
 
 const foodIcon = document.getElementById('foodIcon');
 const scoreEl = document.getElementById('score');
@@ -361,5 +354,6 @@ padButtons.forEach(btn => {
 const tileSize = 20;
 const cols = Math.floor(canvas.width / tileSize);
 const rows = Math.floor(canvas.height / tileSize);
+
 
 
