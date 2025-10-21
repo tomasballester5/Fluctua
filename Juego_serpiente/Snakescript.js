@@ -6,13 +6,24 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 function resizeCanvas() {
-  const size = Math.min(window.innerWidth * 0.9, 700);
-  canvas.width = size;
-  canvas.height = size;
+  // Detecta el tamaño real visible del canvas en pantalla
+  const displayWidth = Math.min(window.innerWidth * 0.9, 700);
+  const displayHeight = displayWidth; // cuadrado
+
+  // Asigna ese mismo tamaño como tamaño interno lógico del canvas
+  canvas.width = displayWidth;
+  canvas.height = displayHeight;
+
+  // Si usás un grid o tamaño de celda, recalculalo acá:
+  if (typeof cellSize !== 'undefined') {
+    gridWidth = Math.floor(canvas.width / cellSize);
+    gridHeight = Math.floor(canvas.height / cellSize);
+  }
 }
+
+// Ejecutar al inicio y al cambiar tamaño
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-
 
 const foodIcon = document.getElementById('foodIcon');
 const scoreEl = document.getElementById('score');
@@ -93,8 +104,9 @@ createFoodIcon();
 function placeFood(){
   let tries = 0;
   do {
-    food.x = Math.floor(Math.random() * (WIDTH / CELL)) * CELL + CELL/2;
-    food.y = Math.floor(Math.random() * (HEIGHT / CELL)) * CELL + CELL/2;
+    food.x = Math.floor(Math.random() * (canvas.width / CELL)) * CELL + CELL / 2;
+food.y = Math.floor(Math.random() * (canvas.height / CELL)) * CELL + CELL / 2;
+
     tries++;
     const conflict = snake.some(p => Math.hypot(p.x - food.x, p.y - food.y) < CELL*0.9);
     if(!conflict) break;
@@ -353,6 +365,7 @@ padButtons.forEach(btn => {
 const tileSize = 20;
 const cols = Math.floor(canvas.width / tileSize);
 const rows = Math.floor(canvas.height / tileSize);
+
 
 
 
