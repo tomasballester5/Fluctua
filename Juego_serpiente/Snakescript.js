@@ -1,4 +1,4 @@
-// Snake — Fluctua (versión fluida y con correcciones + controles táctiles)
+// Snake — Fluctua (versión fluida y con correcciones)
 // Movimiento fluido, sin diagonales, arranque más corto
 
 // ====== CONFIG ======
@@ -18,8 +18,8 @@ btnMenu.onclick = () => window.location.href = '../Principal/Principal.html';
 btnAcerca.onclick = () => window.location.href = '../Acerca_de/acercade.html';
 
 const CELL = 20;
-let WIDTH = canvas.width;
-let HEIGHT = canvas.height;
+const WIDTH = canvas.width;
+const HEIGHT = canvas.height;
 let GAME_RUNNING = false;
 let GAME_OVER = false;
 
@@ -173,7 +173,7 @@ function loop(ts) {
   requestAnimationFrame(loop);
 }
 
-// ====== INPUT (PC) ======
+// ====== INPUT ======
 window.addEventListener('keydown', (e)=>{
   if(e.code === 'Space'){
     if(!GAME_RUNNING && !GAME_OVER){
@@ -200,7 +200,6 @@ window.addEventListener('keydown', (e)=>{
   }
 });
 
-// ====== START / RESET ======
 function startGame(){
   GAME_RUNNING = true;
   lastTime = performance.now();
@@ -316,98 +315,6 @@ function gameOver(){
 // ====== BOTONES ======
 startBtn.addEventListener('click', ()=> startGame());
 resetBtn.addEventListener('click', ()=>{ stopBackgroundAmbience(); resetGame(); });
-
-// ====== MÓVIL: CONTROLES TÁCTILES ======
-const mcUp = document.getElementById('mc-up');
-const mcDown = document.getElementById('mc-down');
-const mcLeft = document.getElementById('mc-left');
-const mcRight = document.getElementById('mc-right');
-
-function applyDir(d){
-  // evita giros 180°
-  if(d && !(d.x === -dir.x && d.y === -dir.y)) {
-    nextDir = d;
-  }
-}
-
-// helper to handle press visuals + input for both touch and mouse
-function bindControl(el, direction){
-  if(!el) return;
-  const dirMap = {
-    up: {x:0,y:-1},
-    down: {x:0,y:1},
-    left: {x:-1,y:0},
-    right: {x:1,y:0}
-  };
-  let pressTimeout = null;
-
-  const start = (ev) => {
-    ev.preventDefault && ev.preventDefault();
-    el.classList.add('pressed');
-    applyDir(dirMap[direction]);
-
-    // start game on first touch if not running
-    if(!GAME_RUNNING && !GAME_OVER){
-      ensureAudio();
-      if(audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume().then(()=>startGame());
-      } else startGame();
-    } else if(GAME_OVER){
-      resetGame();
-    }
-
-    // some devices may not fire end quickly; ensure removal eventually
-    clearTimeout(pressTimeout);
-    pressTimeout = setTimeout(()=> el.classList.remove('pressed'), 160);
-  };
-  const end = (ev) => {
-    ev && ev.preventDefault && ev.preventDefault();
-    el.classList.remove('pressed');
-    clearTimeout(pressTimeout);
-  };
-
-  el.addEventListener('touchstart', start, {passive:false});
-  el.addEventListener('mousedown', start);
-  el.addEventListener('touchend', end);
-  el.addEventListener('mouseup', end);
-  el.addEventListener('touchcancel', end);
-}
-
-bindControl(mcUp, 'up');
-bindControl(mcDown, 'down');
-bindControl(mcLeft, 'left');
-bindControl(mcRight, 'right');
-
-// ====== RESPONSIVE: ajustar canvas para móvil de forma simple ======
-function resizeCanvasToFit(){
-  // prefer a width that fits viewport but not exceed original 720
-  const wrap = document.getElementById('canvasWrap');
-  const maxWidth = Math.min(720, window.innerWidth - 32);
-  const targetWidth = Math.max(260, maxWidth); // don't go too small
-  const aspect = 560 / 720;
-  const targetHeight = Math.round(targetWidth * aspect);
-
-  canvas.width = targetWidth;
-  canvas.height = targetHeight;
-
-  // update globals used in game logic
-  WIDTH = canvas.width;
-  HEIGHT = canvas.height;
-
-  // reposition food so it's still in bounds
-  placeFood();
-  render();
-}
-
-// run on load and on resize (debounced)
-let resizeTimer = null;
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(resizeCanvasToFit, 120);
-});
-
-// initial setup
-resizeCanvasToFit();
 
 // ====== ARRANQUE ======
 resetGame();
