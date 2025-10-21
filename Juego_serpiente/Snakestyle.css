@@ -1,6 +1,6 @@
 :root{
   --bg:#1b1c1c;
-  --panel:#1b1c1c;
+  --:#1b1c1c;
   --accent:#e53935;
   --muted:#9aa3ab;
   --card:#1b1c1c;
@@ -29,8 +29,16 @@ body{
 .icon-btn:hover{ color:var(--accent); box-shadow:0 6px 20px rgba(229,43,63,0.08); transform:translateY(-2px); }
 
 /* Layout */
-.wrap{padding:12px;display:flex;justify-content:center}
 .game{ width:min(1100px,96vw); display:grid; grid-template-columns: 1fr 320px; gap:16px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:10px; padding:12px; box-shadow:0 12px 30px rgba(0,0,0,0.6); align-items:start; }
+
+.wrap {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: nowrap;
+  padding: 1rem;
+}
 
 /* canvas */
 .canvas-wrap {
@@ -38,21 +46,23 @@ body{
   border-radius: 10px;
   padding: 12px;
   background: linear-gradient(180deg, #0b0c0e, #0f1316);
+  flex: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 /* El canvas mantiene tamaño fijo en PC, pero se adapta en móviles */
 canvas {
   display: block;
   background: #061015;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
   border: 2px solid rgba(229, 43, 63, 0.08);
   width: 100%;
   height: auto;
-  max-width: 800px;
+  max-width: 600px; /* tamaño máximo en escritorio */
+  aspect-ratio: 1 / 1; /* mantiene proporción cuadrada */
   height: auto;
 }
 
@@ -75,11 +85,32 @@ canvas {
 .btn.secondary{ background:transparent; border:1px solid rgba(255,255,255,0.04); }
 
 /* responsive */
-@media (max-width:980px){
-  .game{ grid-template-columns: 1fr; }
-  .panel{ order:2; width:100%; }
+@media (max-width: 768px) {
+  .wrap {
+    flex-direction: column;
+    align-items: center;
+  }
+
+    .panel {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 1rem;
+    text-align: center;
+  }
+ .canvas-wrap {
+    width: 100%;
+  }
+  
+  canvas {
+    width: 90vw;
+    height: 90vw;
+  }
+
+  .gamepad {
+    transform: scale(0.9);
+    margin-top: 1rem;
+  }
 }
-/* ===== GAMEPAD ===== */
 .gamepad {
   position: fixed;
   bottom: 40px;
@@ -128,6 +159,7 @@ canvas {
     display: none;
   }
 }
+
 
 
 
