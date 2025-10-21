@@ -321,31 +321,3 @@ resetGame();
 placeFood();
 render();
 updateUI();
-
-// --- 🎮 Controles táctiles por deslizamiento ---
-let startX, startY;
-
-const canvas = document.getElementById("gameCanvas");
-
-canvas.addEventListener("touchstart", e => {
-  const touch = e.touches[0];
-  startX = touch.clientX;
-  startY = touch.clientY;
-});
-
-canvas.addEventListener("touchend", e => {
-  const touch = e.changedTouches[0];
-  const dx = touch.clientX - startX;
-  const dy = touch.clientY - startY;
-
-  if (Math.abs(dx) > Math.abs(dy)) {
-    // Movimiento horizontal
-    if (dx > 30) move("right");
-    else if (dx < -30) move("left");
-  } else {
-    // Movimiento vertical
-    if (dy > 30) move("down");
-    else if (dy < -30) move("up");
-  }
-});
-
