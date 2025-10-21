@@ -3,7 +3,6 @@
 
 // ====== CONFIG ======
 const canvas = document.getElementById('gameCanvas');
-const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
 function resizeCanvas() {
@@ -354,6 +353,7 @@ padButtons.forEach(btn => {
 const tileSize = 20;
 const cols = Math.floor(canvas.width / tileSize);
 const rows = Math.floor(canvas.height / tileSize);
+
 
 
 
