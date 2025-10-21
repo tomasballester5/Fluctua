@@ -33,40 +33,6 @@
         <canvas id="gameCanvas" width="720" height="560" aria-label="Lienzo Snake"></canvas>
         <!-- foodIcon will be positioned absolutely inside canvasWrap -->
         <div id="foodIcon" class="food-icon" aria-hidden="true"></div>
-
-        <!-- CONTROLES MÓVIL (solo visibles en pantallas pequeñas) -->
-        <div id="mobileControls" class="mobile-controls" aria-hidden="false">
-         <main class="wrap">
-  <div class="game" role="application" aria-label="Snake — Fluctua">
-    <div class="canvas-wrap" id="canvasWrap">
-      <canvas id="gameCanvas" width="720" height="560" aria-label="Lienzo Snake"></canvas>
-      <div id="foodIcon" class="food-icon" aria-hidden="true"></div>
-    </div>
-
-    <aside class="panel" aria-hidden="false">
-      ...
-    </aside>
-  </div> <!-- 👈 cierre de .game -->
-
-  <!-- 👇 ahora pegás los controles móviles acá -->
-  <div id="mobileControls" class="mobile-controls" aria-hidden="false">
-    <button id="mc-up" class="mc-btn" aria-label="Arriba" title="Arriba">...</button>
-    <div class="mc-row">
-      <button id="mc-left" class="mc-btn" aria-label="Izquierda" title="Izquierda">...</button>
-      <button id="mc-right" class="mc-btn" aria-label="Derecha" title="Derecha">...</button>
-    </div>
-    <button id="mc-down" class="mc-btn" aria-label="Abajo" title="Abajo">...</button>
-  </div>
-</main>
-          </div>
-
-          <button id="mc-down" class="mc-btn" aria-label="Abajo" title="Abajo">
-            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-              <path d="M6 9l6 6 6-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-          </button>
-        </div>
-
       </div>
 
       <aside class="panel" aria-hidden="false">
@@ -83,7 +49,7 @@
         <div class="controls legend">
           <div>Controles:</div>
           <div>PC: ← ↑ → ↓ / WASD</div>
-          <div>Móvil: flechas táctiles abajo (o arrastra dedo)</div>
+          <div>Móvil: arrastra dedo → dirección (se elige eje más cercano)</div>
           <div style="margin-top:10px">
             <button id="startBtn" class="btn primary">Iniciar (Espacio)</button>
             <button id="resetBtn" class="btn secondary">Reiniciar</button>
@@ -103,4 +69,3 @@
   <!-- render any lucide icons present (food icon inserted by JS uses lucide) -->
 </body>
 </html>
-
