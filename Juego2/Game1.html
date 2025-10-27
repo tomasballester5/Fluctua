@@ -1,45 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brick Breaker - Fluctua</title>
+  <title>Game 1</title>
   <link rel="stylesheet" href="Game1style.css">
-  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-left">
-      <img src="../Principal/Fluctua_Logo.png" alt="Fluctua" class="logo"
-       onclick="window.location.href='../Principal/Principal.html'">
-</a>
-    <h1>Brick Breaker</h1>
+  <header>
+    <img src="logo.png" alt="Logo" class="logo" />
+    <h1>GAME 1</h1>
   </header>
 
-  <main>
-    <section class="game-container">
-      <canvas id="gameCanvas" width="700" height="500"></canvas>
-
-      <div class="sidebar">
-        <div class="info-box">
-          <h3>Puntaje</h3>
-          <p id="score">0</p>
-        </div>
-        <div class="info-box">
-          <h3>Vidas</h3>
-          <p id="lives">3</p>
-        </div>
-        <div class="info-box">
-          <h3>Powerups</h3>
-          <div id="activePowerups"></div>
-        </div>
+  <main class="game-container">
+    <canvas id="gameCanvas"></canvas>
+    <div class="sidebar">
+      <div class="info-box">
+        <p>Puntaje: <span id="score">0</span></p>
       </div>
-    </section>
+      <div class="info-box">
+        <p>Vidas: <span id="lives">3</span></p>
+      </div>
+      <div class="info-box">
+        <p>Powerups activos:</p>
+        <div id="activePowerups"></div>
+      </div>
+    </div>
   </main>
+
+  <!-- 🔻 Joystick táctil solo visible en celular -->
+  <div id="joystick" class="joystick">
+    <button id="leftBtn" class="joy-btn">⟵</button>
+    <button id="rightBtn" class="joy-btn">⟶</button>
+  </div>
 
   <script src="Game1script.js"></script>
 </body>
 </html>
-
-
-
