@@ -40,27 +40,25 @@ createFoodIcon();
 
 // ==== Redimensionado y scaling correcto (evita recortes) ====
 function resizeCanvas() {
-  // mantener relación de aspecto original 4:3 sin estirarse
-  const parent = canvas.parentElement;
-  const maxW = parent.clientWidth - 20;
-  const maxH = window.innerHeight * 0.75;
-  const aspect = LOGICAL_WIDTH / LOGICAL_HEIGHT;
+  // fijamos el tamaño visual (coincide con tu CSS original: 800x600)
+  canvas.style.width = `${LOGICAL_WIDTH}px`;
+  canvas.style.height = `${LOGICAL_HEIGHT}px`;
 
-  let displayW = maxW;
-  let displayH = displayW / aspect;
-  if (displayH > maxH) {
-    displayH = maxH;
-    displayW = displayH * aspect;
-  }
-
-  canvas.style.width = `${displayW}px`;
-  canvas.style.height = `${displayH}px`;
-
+  // usar devicePixelRatio para nitidez; mantenemos el sistema de coordenadas en "píxeles lógicos"
   const dpr = window.devicePixelRatio || 1;
   canvas.width = Math.round(LOGICAL_WIDTH * dpr);
   canvas.height = Math.round(LOGICAL_HEIGHT * dpr);
+
+  // transform para que 1 unidad lógica = 1 CSS pixel en el contexto
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
+window.addEventListener("resize", () => {
+  resizeCanvas();
+  // reposicionar el icono de comida si el canvas cambia
+  placeFoodIcon();
+});
+resizeCanvas();
+
 
 
 // ==== Posicionar la comida correctamente dentro del área visible ====
@@ -323,4 +321,5 @@ startBtn.addEventListener("click", startGame);
 
 // ==== Inicialización ====
 resetGame();
+
 
