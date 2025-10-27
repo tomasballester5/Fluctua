@@ -2,8 +2,8 @@
   --bg: #1b1c1c;
   --text: #eaeef4;
   --accent: #e53935;
-  --muted: #a7b0ba;
-  --panel: #1b1c1c;
+  --muted: #9aa3ab;
+  --card: #1b1c1c;
 }
 
 body {
@@ -14,8 +14,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 header {
@@ -27,7 +27,7 @@ header {
 }
 
 .logo {
-  width: 150px;
+  width: 120px;
   cursor: pointer;
   transition: transform 0.3s;
 }
@@ -38,6 +38,7 @@ header {
 h1 {
   font-size: 2rem;
   color: var(--accent);
+  text-shadow: 0 0 8px rgba(229, 57, 53, 0.7);
 }
 
 .game-container {
@@ -46,18 +47,21 @@ h1 {
   justify-content: center;
   margin-top: 20px;
   gap: 20px;
+  width: 100%;
 }
 
 canvas {
- width: 100%;
+  background: #000;
+  width: 90vw;
+  max-width: 800px;
   height: auto;
-  max-width: 800px; /* si quieres limitarlo */
-  display: block;
-  margin: 0 auto;
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(229, 57, 53, 0.3);
 }
 
 .sidebar {
-  background-color: var(--panel);
+  background-color: var(--card);
   padding: 20px;
   border-radius: 12px;
   width: 180px;
@@ -78,4 +82,50 @@ canvas {
   margin: 5px;
 }
 
+/* 🔻 Estilos del joystick (solo móviles) */
+.joystick {
+  display: none;
+  justify-content: center;
+  gap: 50px;
+  margin: 25px 0;
+}
 
+.joy-btn {
+  width: 80px;
+  height: 80px;
+  background: var(--accent);
+  color: white;
+  font-size: 2.2rem;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(229, 57, 53, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.joy-btn:active {
+  transform: scale(0.9);
+  box-shadow: 0 0 10px rgba(229, 57, 53, 0.8), inset 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+/* 🔻 Diseño responsive */
+@media (max-width: 768px) {
+  .game-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sidebar {
+    width: 90%;
+    margin-top: 20px;
+  }
+
+  .joystick {
+    display: flex;
+  }
+
+  canvas {
+    width: 95vw;
+    height: auto;
+  }
+}
