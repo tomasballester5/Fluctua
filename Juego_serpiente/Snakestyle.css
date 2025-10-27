@@ -1,8 +1,16 @@
+:root {
+  --bg: #1b1c1c;
+  --accent: #e53935;
+  --muted: #9aa3ab;
+  --card: #1b1c1c;
+  --text: #eaeef4;
+}
+
 body {
   margin: 0;
-  background: #030910;
-  color: #fff;
-  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Montserrat", sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,84 +28,45 @@ body {
 
 .topbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 100%;
+  margin-top: 10px;
 }
 
 .logo {
-  height: 40px;
+  height: 60px;
   cursor: pointer;
+  transition: transform 0.3s;
 }
 
-.top-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.menu-btn {
-  background: #162029;
-  border: 1px solid #e53935;
-  color: #fff;
-  padding: 6px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.menu-btn:hover {
-  background: #e53935;
+.logo:hover {
+  transform: scale(1.1);
 }
 
 .scoreboard {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 15px;
   font-size: 16px;
 }
 
 .game {
   position: relative;
-  margin-top: 10px;
-  border: 2px solid #e53935;
+  margin-top: 15px;
+  border: 2px solid var(--accent);
   border-radius: 12px;
   overflow: hidden;
   width: 100%;
+  background: #071018;
+  box-shadow: 0 0 15px rgba(229, 57, 53, 0.3);
 }
 
 canvas {
   display: block;
   width: 100%;
   height: auto;
-  background: #071018;
-}
-
-.food-icon {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
-.controls {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-}
-
-.controls button {
-  background: #e53935;
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: bold;
-}
-
-.controls button:hover {
-  background: #c62828;
 }
 
 /* 🎮 Gamepad táctil */
@@ -118,7 +87,7 @@ canvas {
 .pad-btn {
   background: #162029;
   color: white;
-  border: 2px solid #e53935;
+  border: 2px solid var(--accent);
   width: 55px;
   height: 55px;
   font-size: 24px;
@@ -129,7 +98,7 @@ canvas {
 }
 
 .pad-btn:active {
-  background: #e53935;
+  background: var(--accent);
 }
 
 /* Móvil: más grande el gamepad */
