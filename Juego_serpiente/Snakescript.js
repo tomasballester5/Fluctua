@@ -40,24 +40,28 @@ createFoodIcon();
 
 // ==== Redimensionado y scaling correcto (evita recortes) ====
 function resizeCanvas() {
-  // fijamos el tamaño visual (coincide con tu CSS original: 800x600)
-  canvas.style.width = `${LOGICAL_WIDTH}px`;
-  canvas.style.height = `${LOGICAL_HEIGHT}px`;
+  // mantener relación de aspecto original 4:3 sin estirarse
+  const parent = canvas.parentElement;
+  const maxW = parent.clientWidth - 20;
+  const maxH = window.innerHeight * 0.75;
+  const aspect = LOGICAL_WIDTH / LOGICAL_HEIGHT;
 
-  // usar devicePixelRatio para nitidez; mantenemos el sistema de coordenadas en "píxeles lógicos"
+  let displayW = maxW;
+  let displayH = displayW / aspect;
+  if (displayH > maxH) {
+    displayH = maxH;
+    displayW = displayH * aspect;
+  }
+
+  canvas.style.width = `${displayW}px`;
+  canvas.style.height = `${displayH}px`;
+
   const dpr = window.devicePixelRatio || 1;
   canvas.width = Math.round(LOGICAL_WIDTH * dpr);
   canvas.height = Math.round(LOGICAL_HEIGHT * dpr);
-
-  // transform para que 1 unidad lógica = 1 CSS pixel en el contexto
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
-window.addEventListener("resize", () => {
-  resizeCanvas();
-  // reposicionar el icono de comida si el canvas cambia
-  placeFoodIcon();
-});
-resizeCanvas();
+
 
 // ==== Posicionar la comida correctamente dentro del área visible ====
 function placeFood() {
@@ -73,17 +77,18 @@ function placeFood() {
   placeFoodIcon();
 }
 function placeFoodIcon() {
-  // colocamos el icono con coordenadas en CSS pixels relativas al .canvas-wrap
   const rect = canvas.getBoundingClientRect();
   const parentRect = canvas.parentElement.getBoundingClientRect();
   const offsetX = rect.left - parentRect.left;
   const offsetY = rect.top - parentRect.top;
-  // food.x/y están en píxeles lógicos (coinciden con CSS pixels porque setTransform está aplicada)
-  foodIcon.style.left = `${Math.round(food.x + offsetX)}px`;
-  foodIcon.style.top = `${Math.round(food.y + offsetY)}px`;
-  // asegurar que el icono esté centrado sobre la celda
-  foodIcon.style.transform = "translate(-50%,-50%)";
+  const scaleX = rect.width / LOGICAL_WIDTH;
+  const scaleY = rect.height / LOGICAL_HEIGHT;
+  foodIcon.style.left = `${offsetX + food.x * scaleX}px`;
+  foodIcon.style.top = `${offsetY + food.y * scaleY}px`;
+  foodIcon.style.transform = "translate(-50%, -50%)";
+  foodIcon.style.display = "flex";
 }
+
 
 // ==== Reiniciar juego ====
 function resetGame() {
@@ -126,6 +131,9 @@ function loop(ts) {
     // colisión con bordes
     if (headPos.x < 0 || headPos.x >= LOGICAL_WIDTH || headPos.y < 0 || headPos.y >= LOGICAL_HEIGHT) {
       return gameOver();
+      
+      spawnParticles(food.x, food.y, "#e53935");
+
     }
 
     snake.unshift({ x: headPos.x, y: headPos.y });
@@ -149,12 +157,49 @@ function loop(ts) {
   render();
   requestAnimationFrame(loop);
 }
+// ==== PARTICULAS ====
+let particles = [];
+
+function spawnParticles(x, y, color) {
+  for (let i = 0; i < 12; i++) {
+    particles.push({
+      x,
+      y,
+      vx: (Math.random() - 0.5) * 3,
+      vy: (Math.random() - 0.5) * 3,
+      life: 1,
+      color,
+    });
+  }
+}
+
+function updateParticles(dt) {
+  for (let p of particles) {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.05;
+    p.life -= dt * 2;
+  }
+  particles = particles.filter((p) => p.life > 0);
+}
+
+function renderParticles() {
+  for (let p of particles) {
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
 
 // ==== Render: restaurada estética original (cuerpo como trazo, cabeza circular) ====
 function render() {
   // dibujar fondo (coordenadas lógicas)
   ctx.fillStyle = "#071018";
   ctx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+spawnParticles(food.x, food.y, "#e53935");
 
   // cuadrícula tenue
   ctx.strokeStyle = "rgba(255,255,255,0.03)";
@@ -278,3 +323,4 @@ startBtn.addEventListener("click", startGame);
 
 // ==== Inicialización ====
 resetGame();
+
