@@ -15,34 +15,24 @@
   <main class="game-container">
     <canvas id="gameCanvas"></canvas>
 
-    <div class="sidebar">
-      <div class="info-box">
-        <p>Puntaje: <span id="score">0</span></p>
-      </div>
-      <div class="info-box">
-        <p>Vidas: <span id="lives">3</span></p>
-      </div>
-      <div class="info-box">
-        <p>Powerups activos:</p>
-        <div id="activePowerups"></div>
-      </div>
+    <aside class="sidebar">
+      <div class="info-box"><p>Puntaje: <span id="score">0</span></p></div>
+      <div class="info-box"><p>Vidas: <span id="lives">3</span></p></div>
       <button id="resetBtn" class="reset-btn">🔁 Reiniciar</button>
-    </div>
+    </aside>
   </main>
 
-  <!-- 🎮 Controles táctiles -->
+  <!-- Controles táctiles -->
   <div id="joystick" class="joystick">
     <button id="leftBtn" class="joy-btn">⟵</button>
     <button id="rightBtn" class="joy-btn">⟶</button>
   </div>
 
   <script>
-    // 🔗 Logo que lleva al inicio
     document.getElementById("homeLogo").addEventListener("click", () => {
       window.location.href = "../principal.html";
     });
   </script>
-
   <script src="Game1script.js"></script>
 </body>
 </html>
