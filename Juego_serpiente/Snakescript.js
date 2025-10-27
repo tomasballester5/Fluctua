@@ -1,365 +1,109 @@
-// Snake — Fluctua (versión fluida y con correcciones)
-// Movimiento fluido, sin diagonales, arranque más corto
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
-// ====== CONFIG ======
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-
-function resizeCanvas() {
-  // Detecta el tamaño real visible del canvas en pantalla
-  const displayWidth = Math.min(window.innerWidth * 0.9, 700);
-  const displayHeight = displayWidth; // cuadrado
-
-  // Asigna ese mismo tamaño como tamaño interno lógico del canvas
-  canvas.width = displayWidth;
-  canvas.height = displayHeight;
-
-  // Si usás un grid o tamaño de celda, recalculalo acá:
-  if (typeof cellSize !== 'undefined') {
-    gridWidth = Math.floor(canvas.width / cellSize);
-    gridHeight = Math.floor(canvas.height / cellSize);
-  }
-}
-
-// Ejecutar al inicio y al cambiar tamaño
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
-const foodIcon = document.getElementById('foodIcon');
-const scoreEl = document.getElementById('score');
-const speedDisplay = document.getElementById('speedDisplay');
-const startBtn = document.getElementById('startBtn');
-const resetBtn = document.getElementById('resetBtn');
-const brandLogo = document.getElementById('brandLogo');
-const btnMenu = document.getElementById('btnMenu');
-const btnAcerca = document.getElementById('btnAcerca');
-
-brandLogo.onclick = () => window.location.href = '../Principal/Principal.html';
-btnMenu.onclick = () => window.location.href = '../Principal/Principal.html';
-btnAcerca.onclick = () => window.location.href = '../Acerca_de/acercade.html';
-
-const CELL = 20;
-const WIDTH = canvas.width;
-const HEIGHT = canvas.height;
-let GAME_RUNNING = false;
-let GAME_OVER = false;
-
-// ====== AUDIO ======
-let audioCtx = null;
-function ensureAudio() {
-  if (!audioCtx) {
-    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-    catch(e){ audioCtx = null; }
-  }
-}
-function playNote(freq=440, time=0.14, type='sine', gain=0.06) {
-  if(!audioCtx) return;
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.type = type; o.frequency.value = freq;
-  g.gain.value = gain;
-  o.connect(g); g.connect(audioCtx.destination);
-  o.start();
-  g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + time);
-  setTimeout(()=>{ try{o.stop();}catch(e){} }, (time+0.02)*1000);
-}
-let bgOsc = null;
-function startBackgroundAmbience(){
-  ensureAudio();
-  if(!audioCtx) return;
-  if(bgOsc) return;
-  bgOsc = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  bgOsc.type = 'sine';
-  bgOsc.frequency.value = 110;
-  g.gain.value = 0.004;
-  bgOsc.connect(g); g.connect(audioCtx.destination);
-  bgOsc.start();
-}
-function stopBackgroundAmbience(){
-  try{ if(bgOsc){ bgOsc.stop(); bgOsc.disconnect(); bgOsc=null } }catch(e){}
-}
-
-// ====== ESTADO DEL JUEGO ======
-let snake = [];
-let dir = { x: 1, y: 0 };
-let nextDir = null;
-let headPos = { x: 0, y: 0 };
-let speed = 140; // un poco más rápido, más fluido
-let lastTime = 0;
-let moveTimer = 0;
-let stepTime = 0.09; // controla fluidez del movimiento (segundos por paso)
-let targetLength = 0;
+const box = 20; // tamaño de cada bloque
+let snake = [{ x: 9 * box, y: 10 * box }];
+let direction = "RIGHT";
 let score = 0;
-let food = { x: 0, y: 0 };
-let particles = [];
+let highscore = localStorage.getItem("highscore") || 0;
 
-// ====== COMIDA ======
-function createFoodIcon() {
-  foodIcon.innerHTML = `<i data-lucide="music" style="color: #fff; filter: drop-shadow(0 0 6px #e53935);"></i>`;
-  if(window.lucide) lucide.createIcons();
-}
-createFoodIcon();
+let food = generateFood();
 
-// ✅ FUNCIÓN CORREGIDA
-function placeFood() {
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = rect.width / canvas.width;
-  const scaleY = rect.height / canvas.height;
-
-  let tries = 0;
-  do {
-    food.x = Math.floor(Math.random() * (canvas.width / CELL)) * CELL + CELL / 2;
-    food.y = Math.floor(Math.random() * (canvas.height / CELL)) * CELL + CELL / 2;
-
-    tries++;
-    const conflict = snake.some(p => Math.hypot(p.x - food.x, p.y - food.y) < CELL * 0.9);
-    if (!conflict) break;
-  } while (tries < 200);
-
-  // Posicionar el ícono dentro del canvas
-  foodIcon.style.left = `${rect.left + food.x * scaleX}px`;
-  foodIcon.style.top = `${rect.top + food.y * scaleY}px`;
+// 🔹 Generar comida dentro del mapa visible y alineada a la grilla
+function generateFood() {
+  const maxCols = Math.floor(canvas.width / box);
+  const maxRows = Math.floor(canvas.height / box);
+  const x = Math.floor(Math.random() * maxCols) * box;
+  const y = Math.floor(Math.random() * maxRows) * box;
+  return { x, y };
 }
 
-// ====== REINICIAR ======
-function resetGame() {
-  const startX = Math.floor((WIDTH / CELL) / 2) * CELL + CELL/2;
-  const startY = Math.floor((HEIGHT / CELL) / 2) * CELL + CELL/2;
-  snake = [
-    { x: startX, y: startY },
-    { x: startX - CELL, y: startY },
-    { x: startX - CELL*2, y: startY }
-  ];
-  headPos = { ...snake[0] };
-  dir = { x: 1, y: 0 };
-  nextDir = null;
-  score = 0;
-  GAME_RUNNING = false;
-  GAME_OVER = false;
-  targetLength = CELL * 3; // más corta
-  updateUI();
-  placeFood();
-  render();
+document.addEventListener("keydown", directionControl);
+
+function directionControl(e) {
+  if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+  else if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+  else if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+  else if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
 }
 
-// ====== LOOP ======
-function loop(ts) {
-  if (!GAME_RUNNING || GAME_OVER) return;
-  const dt = (ts - lastTime) / 1000;
-  lastTime = ts;
-  moveTimer += dt;
+// 🎮 Controles táctiles
+document.getElementById("upBtn").addEventListener("touchstart", () => {
+  if (direction !== "DOWN") direction = "UP";
+});
+document.getElementById("downBtn").addEventListener("touchstart", () => {
+  if (direction !== "UP") direction = "DOWN";
+});
+document.getElementById("leftBtn").addEventListener("touchstart", () => {
+  if (direction !== "RIGHT") direction = "LEFT";
+});
+document.getElementById("rightBtn").addEventListener("touchstart", () => {
+  if (direction !== "LEFT") direction = "RIGHT";
+});
 
-  if (nextDir) {
-    dir = nextDir;
-    nextDir = null;
+function draw() {
+  ctx.fillStyle = "#071018";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  for (let i = 0; i < snake.length; i++) {
+    ctx.fillStyle = i === 0 ? "#e53935" : "#9aa3ab";
+    ctx.fillRect(snake[i].x, snake[i].y, box, box);
   }
 
-  if (moveTimer >= stepTime) {
-    moveTimer = 0;
-    headPos.x += dir.x * CELL;
-    headPos.y += dir.y * CELL;
+  // Comida
+  ctx.fillStyle = "#e53935";
+  ctx.beginPath();
+  ctx.arc(food.x + box / 2, food.y + box / 2, box / 2.5, 0, 2 * Math.PI);
+  ctx.fill();
 
-    if (
-      headPos.x < 0 || headPos.x >= WIDTH ||
-      headPos.y < 0 || headPos.y >= HEIGHT
-    ) {
-      gameOver();
-      return;
-    }
+  // Movimiento
+  let headX = snake[0].x;
+  let headY = snake[0].y;
 
-    snake.unshift({ x: headPos.x, y: headPos.y });
-    while (snake.length * CELL > targetLength) snake.pop();
+  if (direction === "LEFT") headX -= box;
+  if (direction === "UP") headY -= box;
+  if (direction === "RIGHT") headX += box;
+  if (direction === "DOWN") headY += box;
 
-    for (let i = 1; i < snake.length; i++) {
-      if (snake[i].x === headPos.x && snake[i].y === headPos.y) {
-        gameOver();
-        return;
-      }
-    }
-
-    if (Math.abs(headPos.x - food.x) < CELL/2 && Math.abs(headPos.y - food.y) < CELL/2) {
-      targetLength += CELL * 3;
-      score++;
-      updateUI();
-      const freqs = [523, 587, 659, 698, 784, 880, 988];
-      const f = freqs[score % freqs.length];
-      ensureAudio();
-      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-      playNote(f, 0.16, "sine", 0.12);
-      placeFood();
-      spawnParticles(headPos.x, headPos.y, "#e53935");
-    }
+  // Comer
+  if (headX === food.x && headY === food.y) {
+    score++;
+    food = generateFood();
+  } else {
+    snake.pop();
   }
 
-  updateParticles(dt);
-  render();
-  requestAnimationFrame(loop);
-}
+  const newHead = { x: headX, y: headY };
 
-// ====== INPUT ======
-window.addEventListener('keydown', (e)=>{
-  if(e.code === 'Space'){
-    if(!GAME_RUNNING && !GAME_OVER){
-      ensureAudio();
-      if(audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume().then(()=>startGame());
-      } else startGame();
-    } else if(GAME_OVER){
-      resetGame();
+  // Colisión
+  if (
+    headX < 0 ||
+    headY < 0 ||
+    headX >= canvas.width ||
+    headY >= canvas.height ||
+    collision(newHead, snake)
+  ) {
+    clearInterval(game);
+    if (score > highscore) {
+      localStorage.setItem("highscore", score);
     }
-    e.preventDefault();
+    alert("¡Perdiste! Reiniciá para volver a jugar.");
     return;
   }
 
-  let d = null;
-  if(e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') d = {x:0,y:-1};
-  if(e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') d = {x:0,y:1};
-  if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') d = {x:-1,y:0};
-  if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') d = {x:1,y:0};
+  snake.unshift(newHead);
 
-  if(d && !(d.x === -dir.x && d.y === -dir.y)) {
-    nextDir = d;
-  }
-});
-
-function startGame(){
-  GAME_RUNNING = true;
-  lastTime = performance.now();
-  moveTimer = 0;
-  startBackgroundAmbience();
-  requestAnimationFrame(loop);
+  document.getElementById("score").textContent = score;
+  document.getElementById("highscore").textContent = highscore;
 }
 
-// ====== PARTICULAS ======
-function spawnParticles(x, y, color){
-  for(let i=0; i<10; i++){
-    particles.push({ x, y, vx:(Math.random()-0.5)*4, vy:(Math.random()-0.5)*4, life:1, color });
-  }
-}
-function updateParticles(dt){
-  for(let p of particles){
-    p.x += p.vx;
-    p.y += p.vy;
-    p.vy += 0.05;
-    p.life -= dt * 2;
-  }
-  particles = particles.filter(p=>p.life>0);
-}
-function renderParticles(){
-  for(let p of particles){
-    ctx.globalAlpha = p.life;
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
-    ctx.fill();
-  }
-  ctx.globalAlpha = 1;
-}
-
-// ====== RENDER ======
-function renderGrid(){
-  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-  ctx.lineWidth = 1;
-  for(let x=0; x<=WIDTH; x+=CELL){
-    ctx.beginPath();
-    ctx.moveTo(x+0.5,0);
-    ctx.lineTo(x+0.5,HEIGHT);
-    ctx.stroke();
-  }
-  for(let y=0; y<=HEIGHT; y+=CELL){
-    ctx.beginPath();
-    ctx.moveTo(0,y+0.5);
-    ctx.lineTo(WIDTH,y+0.5);
-    ctx.stroke();
-  }
-}
-
-function render() {
-  ctx.fillStyle = "#071018";
-  ctx.fillRect(0,0,WIDTH,HEIGHT);
-
-  renderGrid();
-  renderParticles();
-
-  if(snake.length > 1){
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-    ctx.lineWidth = CELL - 2;
-    ctx.strokeStyle = '#ededf4';
-    ctx.beginPath();
-    ctx.moveTo(snake[0].x, snake[0].y);
-    for(let i=1;i<snake.length;i++){
-      ctx.lineTo(snake[i].x, snake[i].y);
+function collision(head, array) {
+  for (let i = 0; i < array.length; i++) {
+    if (head.x === array[i].x && head.y === array[i].y) {
+      return true;
     }
-    ctx.stroke();
   }
-
-  const head = snake[0];
-  ctx.beginPath();
-  ctx.fillStyle = '#e53935';
-  ctx.arc(head.x, head.y, (CELL/2)-2, 0, Math.PI*2);
-  ctx.fill();
-
-  foodIcon.style.left = `${food.x}px`;
-  foodIcon.style.top = `${food.y}px`;
-
-  if(GAME_OVER){
-    ctx.fillStyle = "rgba(0,0,0,0.7)";
-    ctx.fillRect(0,0,WIDTH,HEIGHT);
-    ctx.fillStyle = "#fff";
-    ctx.font = "28px Montserrat, Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("¡Perdiste!", WIDTH/2, HEIGHT/2 - 20);
-    ctx.font = "18px Montserrat, Arial";
-    ctx.fillText("Presiona ESPACIO para reiniciar", WIDTH/2, HEIGHT/2 + 20);
-  }
+  return false;
 }
 
-// ====== UI ======
-function updateUI(){
-  scoreEl.textContent = score;
-  if(speed < 100) speedDisplay.textContent = 'Lenta';
-  else if(speed < 160) speedDisplay.textContent = 'Normal';
-  else speedDisplay.textContent = 'Rápida';
-}
-
-// ====== FIN DEL JUEGO ======
-function gameOver(){
-  stopBackgroundAmbience();
-  GAME_OVER = true;
-  GAME_RUNNING = false;
-  render();
-}
-
-// ====== BOTONES ======
-startBtn.addEventListener('click', ()=> startGame());
-resetBtn.addEventListener('click', ()=>{ stopBackgroundAmbience(); resetGame(); });
-
-// ====== ARRANQUE ======
-resetGame();
-placeFood();
-render();
-updateUI();
-
-// ===== GAMEPAD CONTROLS =====
-const padButtons = document.querySelectorAll(".pad-btn");
-
-padButtons.forEach(btn => {
-  btn.addEventListener("touchstart", e => {
-    e.preventDefault();
-    const dirName = btn.dataset.dir;
-    let newDir = null;
-
-    if (dirName === "up" && dir.y !== 1) newDir = { x: 0, y: -1 };
-    else if (dirName === "down" && dir.y !== -1) newDir = { x: 0, y: 1 };
-    else if (dirName === "left" && dir.x !== 1) newDir = { x: -1, y: 0 };
-    else if (dirName === "right" && dir.x !== -1) newDir = { x: 1, y: 0 };
-
-    if (newDir) nextDir = newDir;
-  }, { passive: false });
-});
-
-const tileSize = 20;
-const cols = Math.floor(canvas.width / tileSize);
-const rows = Math.floor(canvas.height / tileSize);
+const game = setInterval(draw, 100);
