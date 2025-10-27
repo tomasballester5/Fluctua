@@ -1,146 +1,88 @@
 :root {
-  --bg: #1b1c1c;
-  --text: #eaeef4;
+  --bg: #1c1c1c;
   --accent: #e53935;
-  --muted: #9aa3ab;
-  --card: #1b1c1c;
+  --text: #fff;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
+  margin: 0;
+  padding: 0;
   background-color: var(--bg);
   color: var(--text);
-  font-family: "Montserrat", sans-serif;
-  margin: 0;
+  font-family: "Arial", sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  padding: 10px;
+  text-align: center;
+  margin-top: 10px;
 }
 
 .logo {
-  width: 120px;
+  width: 80px;
   cursor: pointer;
-  transition: transform 0.3s;
-}
-.logo:hover {
-  transform: scale(1.1);
 }
 
 h1 {
+  margin: 10px 0;
   font-size: 2rem;
   color: var(--accent);
-  text-shadow: 0 0 8px rgba(229, 57, 53, 0.7);
 }
 
 .game-container {
   display: flex;
+  flex-direction: row;
   align-items: flex-start;
   justify-content: center;
-  margin-top: 20px;
   gap: 20px;
+  flex-wrap: wrap;
   width: 100%;
+  max-width: 900px;
 }
 
 canvas {
-  background: #000;
-  width: 90vw;
-  max-width: 800px;
-  height: auto;
-  border: 2px solid var(--accent);
+  background-color: #000;
+  border: 3px solid var(--accent);
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(229, 57, 53, 0.3);
+  width: 90vw;
+  max-width: 600px;
+  height: auto;
+  aspect-ratio: 3 / 2;
 }
 
 .sidebar {
-  background-color: var(--card);
-  padding: 20px;
-  border-radius: 12px;
-  width: 180px;
-  box-shadow: 0 0 10px rgba(229, 57, 53, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-width: 120px;
 }
 
 .info-box {
-  margin-bottom: 20px;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 8px;
   text-align: center;
-  background-color: #14171b;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-#activePowerups svg {
-  width: 24px;
-  height: 24px;
-  margin: 5px;
-}
-
-/* 🔻 Estilos del joystick (solo móviles) */
-.joystick {
-  display: none;
-  justify-content: center;
-  gap: 50px;
-  margin: 25px 0;
-}
-
-.joy-btn {
-  width: 80px;
-  height: 80px;
-  background: var(--accent);
-  color: white;
-  font-size: 2.2rem;
-  border: none;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(229, 57, 53, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  transition: transform 0.1s, box-shadow 0.1s;
-}
-
-.joy-btn:active {
-  transform: scale(0.9);
-  box-shadow: 0 0 10px rgba(229, 57, 53, 0.8), inset 0 0 5px rgba(255, 255, 255, 0.3);
-}
-
-/* 🔻 Diseño responsive */
-@media (max-width: 768px) {
-  .game-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .sidebar {
-    width: 90%;
-    margin-top: 20px;
-  }
-
-  .joystick {
-    display: flex;
-  }
-
-  canvas {
-    width: 95vw;
-    height: auto;
-  }
-}
-/* 🔁 Botón de reinicio */
-.reset-btn {
   width: 100%;
-  padding: 10px;
+}
+
+.reset-btn {
+  padding: 10px 20px;
   background-color: var(--accent);
   border: none;
+  border-radius: 8px;
   color: white;
   font-size: 1rem;
   font-weight: bold;
-  border-radius: 10px;
   cursor: pointer;
-  transition: transform 0.1s, background-color 0.2s;
+  transition: background 0.3s, transform 0.1s;
 }
 
 .reset-btn:hover {
@@ -148,23 +90,68 @@ canvas {
   transform: scale(1.05);
 }
 
-.reset-btn:active {
-  transform: scale(0.95);
+/* 🎮 Controles táctiles */
+.joystick {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0;
+  gap: 25px;
 }
 
-/* 🔹 Mejoras móviles */
+.joy-btn {
+  width: 80px;
+  height: 80px;
+  font-size: 2rem;
+  border: none;
+  border-radius: 50%;
+  background-color: #444;
+  color: white;
+  box-shadow: 0 0 10px #000;
+  cursor: pointer;
+}
+
+.joy-btn:active {
+  background-color: #666;
+}
+
+/* 📱 Estilo para móviles */
 @media (max-width: 600px) {
   h1 {
     font-size: 1.6rem;
   }
 
-  .info-box p {
+  .game-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  canvas {
+    width: 95vw;
+    max-width: none;
+  }
+
+  .sidebar {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 95%;
+    gap: 8px;
+  }
+
+  .info-box {
     font-size: 1rem;
+    padding: 8px;
+    width: auto;
   }
 
   .reset-btn {
-    font-size: 1.1rem;
-    margin-top: 10px;
+    width: auto;
+    font-size: 1rem;
+  }
+
+  .joystick {
+    margin-bottom: 20px;
   }
 
   .joy-btn {
@@ -172,10 +159,4 @@ canvas {
     height: 70px;
     font-size: 2rem;
   }
-
-  .sidebar {
-    width: 90%;
-    padding: 15px;
-  }
 }
-
