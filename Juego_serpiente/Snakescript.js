@@ -1,19 +1,10 @@
-
 // Snake — Fluctua (versión fluida y con correcciones)
 // Movimiento fluido, sin diagonales, arranque más corto
 
 // ====== CONFIG ======
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-
-const box = 20; // tamaño de cada bloque
-let snake = [{ x: 9 * box, y: 10 * box }];
-let direction = "RIGHT";
-let score = 0;
-let highscore = localStorage.getItem("highscore") || 0;
-
-let food = generateFood();
-
+// --- CORRECCIÓN: el id real del canvas en tu HTML es "game" (no "gameCanvas")
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
 const foodIcon = document.getElementById('foodIcon');
 const scoreEl = document.getElementById('score');
 const speedDisplay = document.getElementById('speedDisplay');
@@ -24,6 +15,14 @@ const btnMenu = document.getElementById('btnMenu');
 const btnAcerca = document.getElementById('btnAcerca');
 
 brandLogo.onclick = () => window.location.href = '../Principal/Principal.html';
+btnMenu.onclick = () => window.location.href = '../Principal/Principal.html';
+btnAcerca.onclick = () => window.location.href = '../Acerca_de/acercade.html';
+
+// --- CORRECCIÓN: forzamos las dimensiones internas del canvas para que coincidan
+// con el tamaño que viste en la UI (800x600). Esto evita discrepancias entre
+// canvas.width/canvas.height y el CSS (que causa que elementos aparezcan "fuera").
+canvas.width = 800;
+canvas.height = 600;
 
 const CELL = 20;
 const WIDTH = canvas.width;
@@ -88,15 +87,25 @@ function createFoodIcon() {
 }
 createFoodIcon();
 
-// 🔹 Generar comida dentro del mapa visible y alineada a la grilla
-function generateFood() {
-  const maxCols = Math.floor(canvas.width / box);
-  const maxRows = Math.floor(canvas.height / box);
-  const x = Math.floor(Math.random() * maxCols) * box;
-  const y = Math.floor(Math.random() * maxRows) * box;
-  return { x, y };
-}
+function placeFood(){
+  let tries = 0;
+  do {
+    // Genera la posición alineada a la retícula (centro de celda)
+    food.x = Math.floor(Math.random() * (WIDTH / CELL)) * CELL + CELL/2;
+    food.y = Math.floor(Math.random() * (HEIGHT / CELL)) * CELL + CELL/2;
+    tries++;
+    const conflict = snake.some(p => Math.hypot(p.x - food.x, p.y - food.y) < CELL*0.9);
+    if(!conflict) break;
+  } while(tries < 200);
 
+  // --- CORRECCIÓN: el .food-icon está dentro de .canvas-wrap, por lo que hay
+  // que posicionarlo en relación al canvas dentro del wrap (canvas tiene padding en CSS).
+  // Usamos canvas.offsetLeft/offsetTop (relativo a su parent .canvas-wrap).
+  const offsetX = canvas.offsetLeft;
+  const offsetY = canvas.offsetTop;
+  foodIcon.style.left = `${food.x + offsetX}px`;
+  foodIcon.style.top = `${food.y + offsetY}px`;
+}
 
 // ====== REINICIAR ======
 function resetGame() {
@@ -126,16 +135,19 @@ function loop(ts) {
   lastTime = ts;
   moveTimer += dt;
 
+  // actualiza dirección si se presionó antes del siguiente paso
   if (nextDir) {
     dir = nextDir;
     nextDir = null;
   }
 
+  // mover solo cuando se cumpla el tiempo entre pasos
   if (moveTimer >= stepTime) {
     moveTimer = 0;
     headPos.x += dir.x * CELL;
     headPos.y += dir.y * CELL;
 
+    // bordes
     if (
       headPos.x < 0 || headPos.x >= WIDTH ||
       headPos.y < 0 || headPos.y >= HEIGHT
@@ -147,6 +159,7 @@ function loop(ts) {
     snake.unshift({ x: headPos.x, y: headPos.y });
     while (snake.length * CELL > targetLength) snake.pop();
 
+    // autocolisión
     for (let i = 1; i < snake.length; i++) {
       if (snake[i].x === headPos.x && snake[i].y === headPos.y) {
         gameOver();
@@ -154,6 +167,7 @@ function loop(ts) {
       }
     }
 
+    // comer
     if (Math.abs(headPos.x - food.x) < CELL/2 && Math.abs(headPos.y - food.y) < CELL/2) {
       targetLength += CELL * 3;
       score++;
@@ -194,6 +208,7 @@ window.addEventListener('keydown', (e)=>{
   if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') d = {x:-1,y:0};
   if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') d = {x:1,y:0};
 
+  // evita diagonales y giros 180°
   if(d && !(d.x === -dir.x && d.y === -dir.y)) {
     nextDir = d;
   }
@@ -258,6 +273,7 @@ function render() {
   renderGrid();
   renderParticles();
 
+  // cuerpo
   if(snake.length > 1){
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
@@ -271,14 +287,18 @@ function render() {
     ctx.stroke();
   }
 
+  // cabeza
   const head = snake[0];
   ctx.beginPath();
   ctx.fillStyle = '#e53935';
   ctx.arc(head.x, head.y, (CELL/2)-2, 0, Math.PI*2);
   ctx.fill();
 
-  foodIcon.style.left = `${food.x}px`;
-  foodIcon.style.top = `${food.y}px`;
+  // comida
+  // --- NO modificamos la lógica de dibujo en canvas: la comida se muestra como
+  // un elemento DOM (.food-icon) posicionado sobre el canvas (ya corregida en placeFood())
+  foodIcon.style.left = `${food.x + canvas.offsetLeft}px`;
+  foodIcon.style.top = `${food.y + canvas.offsetTop}px`;
 
   if(GAME_OVER){
     ctx.fillStyle = "rgba(0,0,0,0.7)";
@@ -335,37 +355,3 @@ padButtons.forEach(btn => {
     if (newDir) nextDir = newDir;
   }, { passive: false });
 });
-
-const tileSize = 20;
-const cols = Math.floor(canvas.width / tileSize);
-const rows = Math.floor(canvas.height / tileSize);
-
-document.addEventListener("keydown", directionControl);
-
-function directionControl(e) {
-  if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
-  else if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
-  else if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
-  else if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
-}
-
-// 🎮 Controles táctiles
-document.getElementById("upBtn").addEventListener("touchstart", () => {
-  if (direction !== "DOWN") direction = "UP";
-});
-document.getElementById("downBtn").addEventListener("touchstart", () => {
-  if (direction !== "UP") direction = "DOWN";
-});
-document.getElementById("leftBtn").addEventListener("touchstart", () => {
-  if (direction !== "RIGHT") direction = "LEFT";
-});
-document.getElementById("rightBtn").addEventListener("touchstart", () => {
-  if (direction !== "LEFT") direction = "RIGHT";
-});
-
- // Comida
-  ctx.fillStyle = "#e53935";
-  ctx.beginPath();
-  ctx.arc(food.x + box / 2, food.y + box / 2, box / 2.5, 0, 2 * Math.PI);
-  ctx.fill();
-
