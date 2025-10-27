@@ -3,13 +3,15 @@ const ctx = canvas.getContext("2d");
 
 // Ajuste dinámico del canvas
 function resizeCanvas() {
-  canvas.width = Math.min(window.innerWidth * 0.9, 800);
+  // Tamaño máximo 800px, adaptativo en móviles
+  const scale = window.innerWidth < 600 ? 0.95 : 0.9;
+  canvas.width = Math.min(window.innerWidth * scale, 800);
   canvas.height = canvas.width * 0.6;
 }
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
-// Variables base del juego
+// Variables base
 const paddle = {
   x: canvas.width / 2 - 50,
   y: canvas.height - 30,
@@ -41,7 +43,6 @@ let lives = 3;
 let bricks = [];
 let isGameRunning = false;
 let powerups = [];
-let activePowerups = [];
 
 let leftPressed = false;
 let rightPressed = false;
@@ -111,12 +112,10 @@ function moveBall() {
   ball.x += ball.dx;
   ball.y += ball.dy;
 
-  // paredes
   if (ball.x - ball.size < 0 || ball.x + ball.size > canvas.width)
     ball.dx *= -1;
   if (ball.y - ball.size < 0) ball.dy *= -1;
 
-  // paddle
   if (
     ball.x > paddle.x &&
     ball.x < paddle.x + paddle.width &&
@@ -126,7 +125,6 @@ function moveBall() {
     playSound("bounce");
   }
 
-  // abajo = pierde vida
   if (ball.y + ball.size > canvas.height) {
     lives--;
     document.getElementById("lives").textContent = lives;
@@ -138,7 +136,6 @@ function moveBall() {
     }
   }
 
-  // ladrillos
   for (let c = 0; c < brickColumnCount; c++) {
     for (let r = 0; r < brickRowCount; r++) {
       const b = bricks[c][r];
@@ -155,7 +152,6 @@ function moveBall() {
           document.getElementById("score").textContent = score;
           playSound("break");
 
-          // chance de powerup 5%
           if (Math.random() < 0.05) spawnPowerup(b.x + brickWidth / 2, b.y);
         }
       }
@@ -165,12 +161,11 @@ function moveBall() {
 
 function spawnPowerup(x, y) {
   const types = [
-    { name: "lentitud", color: "#2196F3", effect: slowBall },
-    { name: "duplicar", color: "#4CAF50", effect: duplicateBall },
-    { name: "vida+", color: "#00E676", effect: extraLife },
-    { name: "rapidez", color: "#FF9100", effect: speedBall },
-    { name: "vida-", color: "#FF1744", effect: loseLife },
-    { name: "reinicio", color: "#FFD600", effect: resetBricks }
+    { name: "lentitud", color: "#2196F3", effect: () => { ball.dx *= 0.7; ball.dy *= 0.7; } },
+    { name: "rapidez", color: "#FF9100", effect: () => { ball.dx *= 1.5; ball.dy *= 1.5; } },
+    { name: "vida+", color: "#00E676", effect: () => { lives++; document.getElementById("lives").textContent = lives; } },
+    { name: "vida-", color: "#FF1744", effect: () => { lives--; document.getElementById("lives").textContent = lives; } },
+    { name: "reinicio", color: "#FFD600", effect: () => createBricks() }
   ];
   const p = types[Math.floor(Math.random() * types.length)];
   powerups.push({ ...p, x, y });
@@ -179,6 +174,7 @@ function spawnPowerup(x, y) {
 function movePowerups() {
   powerups.forEach((p, index) => {
     p.y += 2;
+    if (p.y > canvas.height) powerups.splice(index, 1);
     if (
       p.x > paddle.x &&
       p.x < paddle.x + paddle.width &&
@@ -188,20 +184,6 @@ function movePowerups() {
       powerups.splice(index, 1);
     }
   });
-}
-
-function slowBall() { ball.dx *= 0.7; ball.dy *= 0.7; playSound("effect"); }
-function speedBall() { ball.dx *= 1.5; ball.dy *= 1.5; playSound("effect"); }
-function duplicateBall() { playSound("effect"); }
-function extraLife() { lives++; document.getElementById("lives").textContent = lives; playSound("effect"); }
-function loseLife() { lives--; document.getElementById("lives").textContent = lives; playSound("effect"); }
-function resetBricks() { createBricks(); playSound("effect"); }
-
-function resetBall() {
-  ball.x = canvas.width / 2;
-  ball.y = canvas.height - 45;
-  ball.dx = 4;
-  ball.dy = -4;
 }
 
 function playSound(type) {
@@ -242,6 +224,24 @@ function startGame() {
   }
 }
 
+function resetGame() {
+  score = 0;
+  lives = 3;
+  document.getElementById("score").textContent = score;
+  document.getElementById("lives").textContent = lives;
+  createBricks();
+  resetBall();
+  isGameRunning = true;
+  update();
+}
+
+function resetBall() {
+  ball.x = canvas.width / 2;
+  ball.y = canvas.height - 45;
+  ball.dx = 4;
+  ball.dy = -4;
+}
+
 // 🎮 Controles teclado
 document.addEventListener("keydown", e => {
   if (e.key === "ArrowRight") rightPressed = true;
@@ -264,5 +264,8 @@ if (leftBtn && rightBtn) {
   rightBtn.addEventListener("touchend", () => (rightPressed = false));
 }
 
-// Dibuja la escena inicial
+// 🔁 Botón de reinicio
+document.getElementById("resetBtn").addEventListener("click", resetGame);
+
+// Dibuja escena inicial
 draw();
