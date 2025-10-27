@@ -1,15 +1,14 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// Ajuste dinámico del canvas
 function resizeCanvas() {
-  // Tamaño máximo 800px, adaptativo en móviles
-  const scale = window.innerWidth < 600 ? 0.95 : 0.9;
-  canvas.width = Math.min(window.innerWidth * scale, 800);
-  canvas.height = canvas.width * 0.6;
+  const maxWidth = Math.min(window.innerWidth * 0.9, 600);
+  canvas.width = maxWidth;
+  canvas.height = maxWidth * 0.66;
 }
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
+
 
 // Variables base
 const paddle = {
@@ -269,3 +268,4 @@ document.getElementById("resetBtn").addEventListener("click", resetGame);
 
 // Dibuja escena inicial
 draw();
+
