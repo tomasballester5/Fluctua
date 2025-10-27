@@ -2,13 +2,12 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Brick Breaker</title>
   <link rel="stylesheet" href="Game1style.css">
 </head>
 <body>
   <header>
-    <!-- 🔗 Logo que lleva a la página principal -->
     <img src="Fluctua_Logo.png" alt="Fluctua Logo" class="logo" id="homeLogo" />
     <h1>BRICK BREAKER</h1>
   </header>
@@ -27,17 +26,18 @@
         <p>Powerups activos:</p>
         <div id="activePowerups"></div>
       </div>
+      <button id="resetBtn" class="reset-btn">🔁 Reiniciar</button>
     </div>
   </main>
 
-  <!-- 🎮 Joystick táctil visible solo en celulares -->
+  <!-- 🎮 Controles táctiles -->
   <div id="joystick" class="joystick">
     <button id="leftBtn" class="joy-btn">⟵</button>
     <button id="rightBtn" class="joy-btn">⟶</button>
   </div>
 
   <script>
-    // 🔗 Redirección al hacer clic en el logo
+    // 🔗 Logo que lleva al inicio
     document.getElementById("homeLogo").addEventListener("click", () => {
       window.location.href = "../principal.html";
     });
