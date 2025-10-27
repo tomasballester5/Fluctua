@@ -129,3 +129,53 @@ canvas {
     height: auto;
   }
 }
+/* 🔁 Botón de reinicio */
+.reset-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--accent);
+  border: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.1s, background-color 0.2s;
+}
+
+.reset-btn:hover {
+  background-color: #d32f2f;
+  transform: scale(1.05);
+}
+
+.reset-btn:active {
+  transform: scale(0.95);
+}
+
+/* 🔹 Mejoras móviles */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .info-box p {
+    font-size: 1rem;
+  }
+
+  .reset-btn {
+    font-size: 1.1rem;
+    margin-top: 10px;
+  }
+
+  .joy-btn {
+    width: 70px;
+    height: 70px;
+    font-size: 2rem;
+  }
+
+  .sidebar {
+    width: 90%;
+    padding: 15px;
+  }
+}
+
