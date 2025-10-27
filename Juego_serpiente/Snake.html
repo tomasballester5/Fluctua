@@ -1,55 +1,45 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Snake - Fluctua</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="Snake.css">
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="Snakestyle.css" />
 </head>
 <body>
   <div class="container">
-    <header class="topbar">
-      <img id="brandLogo" src="../Principal/logo.png" alt="Fluctua logo" class="logo">
-      <div class="top-buttons">
-        <button id="btnMenu" class="menu-btn">Menú</button>
-        <button id="btnAcerca" class="menu-btn">Acerca de</button>
-      </div>
-    </header>
-
-    <main class="game-section">
-      <div class="scoreboard">
-        <span>Puntaje: <strong id="score">0</strong></span>
-        <span>Velocidad: <strong id="speedDisplay">Normal</strong></span>
-      </div>
-
-      <div class="game">
-        <canvas id="gameCanvas"></canvas>
-        <div id="foodIcon" class="food-icon"></div>
-      </div>
-
-      <div class="controls">
-        <button id="startBtn">Iniciar</button>
-        <button id="resetBtn">Reiniciar</button>
-      </div>
-    </main>
-  </div>
-
-  <!-- 🎮 GAMEPAD (fuera del área del juego) -->
-  <div class="gamepad">
-    <div class="pad-row">
-      <button class="pad-btn up" data-dir="up">▲</button>
+    <div class="topbar">
+      <img src="Fluctua_Logo.png" alt="Fluctua Logo" class="logo" id="homeLogo" />
     </div>
-    <div class="pad-row">
-      <button class="pad-btn left" data-dir="left">◀</button>
-      <button class="pad-btn right" data-dir="right">▶</button>
+
+    <div class="scoreboard">
+      <span>Puntaje: <span id="score">0</span></span>
+      <span>Alta puntuación: <span id="highscore">0</span></span>
     </div>
-    <div class="pad-row">
-      <button class="pad-btn down" data-dir="down">▼</button>
+
+    <div class="game">
+      <canvas id="gameCanvas" width="400" height="400"></canvas>
+    </div>
+
+    <!-- 🎮 Controles táctiles -->
+    <div class="gamepad">
+      <div class="pad-row">
+        <button class="pad-btn" id="upBtn">▲</button>
+      </div>
+      <div class="pad-row">
+        <button class="pad-btn" id="leftBtn">◀</button>
+        <button class="pad-btn" id="downBtn">▼</button>
+        <button class="pad-btn" id="rightBtn">▶</button>
+      </div>
     </div>
   </div>
 
+  <script>
+    // Redirige al menú principal
+    document.getElementById("homeLogo").addEventListener("click", () => {
+      window.location.href = "../principal.html";
+    });
+  </script>
   <script src="Snakescript.js"></script>
 </body>
 </html>
