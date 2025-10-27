@@ -1,6 +1,15 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+// Ajuste dinámico del canvas
+function resizeCanvas() {
+  canvas.width = Math.min(window.innerWidth * 0.9, 800);
+  canvas.height = canvas.width * 0.6;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+// Variables base del juego
 const paddle = {
   x: canvas.width / 2 - 50,
   y: canvas.height - 30,
@@ -34,6 +43,9 @@ let isGameRunning = false;
 let powerups = [];
 let activePowerups = [];
 
+let leftPressed = false;
+let rightPressed = false;
+
 function createBricks() {
   bricks = [];
   for (let c = 0; c < brickColumnCount; c++) {
@@ -43,13 +55,11 @@ function createBricks() {
     }
   }
 }
-
 createBricks();
 
 function drawPaddle() {
   ctx.fillStyle = "#fff";
   ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-  // líneas tipo piano
   ctx.fillStyle = "#000";
   for (let i = 0; i < 10; i++) {
     ctx.fillRect(paddle.x + i * 10, paddle.y, 2, paddle.height);
@@ -89,7 +99,9 @@ function drawPowerups() {
 }
 
 function movePaddle() {
-  paddle.x += paddle.dx;
+  if (leftPressed) paddle.x -= paddle.speed;
+  if (rightPressed) paddle.x += paddle.speed;
+
   if (paddle.x < 0) paddle.x = 0;
   if (paddle.x + paddle.width > canvas.width)
     paddle.x = canvas.width - paddle.width;
@@ -143,7 +155,7 @@ function moveBall() {
           document.getElementById("score").textContent = score;
           playSound("break");
 
-          // chance de powerup 30%
+          // chance de powerup 5%
           if (Math.random() < 0.05) spawnPowerup(b.x + brickWidth / 2, b.y);
         }
       }
@@ -153,12 +165,12 @@ function moveBall() {
 
 function spawnPowerup(x, y) {
   const types = [
-    { name: "lentitud", color: "#2196F3", effect: slowBall, icon: "turtle" },
-    { name: "duplicar", color: "#4CAF50", effect: duplicateBall, icon: "copy" },
-    { name: "vida+", color: "#00E676", effect: extraLife, icon: "heart" },
-    { name: "rapidez", color: "#FF9100", effect: speedBall, icon: "zap" },
-    { name: "vida-", color: "#FF1744", effect: loseLife, icon: "skull" },
-    { name: "reinicio", color: "#FFD600", effect: resetBricks, icon: "refresh-cw" }
+    { name: "lentitud", color: "#2196F3", effect: slowBall },
+    { name: "duplicar", color: "#4CAF50", effect: duplicateBall },
+    { name: "vida+", color: "#00E676", effect: extraLife },
+    { name: "rapidez", color: "#FF9100", effect: speedBall },
+    { name: "vida-", color: "#FF1744", effect: loseLife },
+    { name: "reinicio", color: "#FFD600", effect: resetBricks }
   ];
   const p = types[Math.floor(Math.random() * types.length)];
   powerups.push({ ...p, x, y });
@@ -173,26 +185,14 @@ function movePowerups() {
       p.y + 10 > paddle.y
     ) {
       p.effect();
-      showPowerup(p);
       powerups.splice(index, 1);
     }
   });
 }
 
-function showPowerup(p) {
-  const container = document.getElementById("activePowerups");
-  const icon = lucide.createIcons({ nameAttr: "icon" });
-  const div = document.createElement("div");
-  div.innerHTML = `<i data-lucide="${p.icon}" style="color:${p.color}"></i>`;
-  container.appendChild(div);
-  lucide.createIcons();
-  setTimeout(() => div.remove(), 5000);
-}
-
-// efectos simulados
 function slowBall() { ball.dx *= 0.7; ball.dy *= 0.7; playSound("effect"); }
 function speedBall() { ball.dx *= 1.5; ball.dy *= 1.5; playSound("effect"); }
-function duplicateBall() { /* simulado */ playSound("effect"); }
+function duplicateBall() { playSound("effect"); }
 function extraLife() { lives++; document.getElementById("lives").textContent = lives; playSound("effect"); }
 function loseLife() { lives--; document.getElementById("lives").textContent = lives; playSound("effect"); }
 function resetBricks() { createBricks(); playSound("effect"); }
@@ -204,7 +204,6 @@ function resetBall() {
   ball.dy = -4;
 }
 
-// sonidos simulados
 function playSound(type) {
   const ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
   const osc = ctxAudio.createOscillator();
@@ -216,7 +215,7 @@ function playSound(type) {
   else osc.frequency.value = 660;
   gain.gain.value = 0.05;
   osc.start();
-  osc.stop(ctxAudio.currentTime + 0.2);
+  osc.stop(ctxAudio.currentTime + 0.1);
 }
 
 function draw() {
@@ -243,104 +242,27 @@ function startGame() {
   }
 }
 
+// 🎮 Controles teclado
 document.addEventListener("keydown", e => {
-  if (e.key === "ArrowRight") paddle.dx = paddle.speed;
-  if (e.key === "ArrowLeft") paddle.dx = -paddle.speed;
+  if (e.key === "ArrowRight") rightPressed = true;
+  if (e.key === "ArrowLeft") leftPressed = true;
   if (e.code === "Space") startGame();
 });
 document.addEventListener("keyup", e => {
-  if (e.key === "ArrowRight" || e.key === "ArrowLeft") paddle.dx = 0;
-});
-
-draw();
-
-function resizeCanvas() {
-  const canvas = document.getElementById('game');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
-const leftBtn = document.getElementById("leftBtn");
-const rightBtn = document.getElementById("rightBtn");
-
-if (leftBtn && rightBtn) {
-  const touchStart = (btn) => {
-    if (btn === "left") leftPressed = true;
-    if (btn === "right") rightPressed = true;
-  };
-  const touchEnd = (btn) => {
-    if (btn === "left") leftPressed = false;
-    if (btn === "right") rightPressed = false;
-  };
-
-  leftBtn.addEventListener("touchstart", () => touchStart("left"));
-  leftBtn.addEventListener("touchend", () => touchEnd("left"));
-  rightBtn.addEventListener("touchstart", () => touchStart("right"));
-  rightBtn.addEventListener("touchend", () => touchEnd("right"));
-}
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-
-// Ajuste dinámico del canvas
-function resizeCanvas() {
-  canvas.width = Math.min(window.innerWidth * 0.9, 800);
-  canvas.height = canvas.width * 0.6;
-}
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
-
-// Variables base (puedes conservar las tuyas)
-let player = { x: canvas.width / 2, y: canvas.height - 50, w: 50, h: 10, speed: 6 };
-let leftPressed = false;
-let rightPressed = false;
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowLeft") leftPressed = true;
-  if (e.key === "ArrowRight") rightPressed = true;
-});
-document.addEventListener("keyup", (e) => {
-  if (e.key === "ArrowLeft") leftPressed = false;
   if (e.key === "ArrowRight") rightPressed = false;
+  if (e.key === "ArrowLeft") leftPressed = false;
 });
 
-// 🔻 Controles táctiles
+// 🎮 Controles táctiles
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
 
 if (leftBtn && rightBtn) {
-  const touchStart = (btn) => {
-    if (btn === "left") leftPressed = true;
-    if (btn === "right") rightPressed = true;
-  };
-  const touchEnd = (btn) => {
-    if (btn === "left") leftPressed = false;
-    if (btn === "right") rightPressed = false;
-  };
-
-  leftBtn.addEventListener("touchstart", () => touchStart("left"));
-  leftBtn.addEventListener("touchend", () => touchEnd("left"));
-  rightBtn.addEventListener("touchstart", () => touchStart("right"));
-  rightBtn.addEventListener("touchend", () => touchEnd("right"));
+  leftBtn.addEventListener("touchstart", () => (leftPressed = true));
+  leftBtn.addEventListener("touchend", () => (leftPressed = false));
+  rightBtn.addEventListener("touchstart", () => (rightPressed = true));
+  rightBtn.addEventListener("touchend", () => (rightPressed = false));
 }
 
-// 🔹 Lógica principal del juego (mantiene tu jugabilidad)
-function update() {
-  if (leftPressed) player.x -= player.speed;
-  if (rightPressed) player.x += player.speed;
-
-  player.x = Math.max(0, Math.min(canvas.width - player.w, player.x));
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawPlayer();
-  requestAnimationFrame(update);
-}
-
-function drawPlayer() {
-  ctx.fillStyle = "#e53935";
-  ctx.fillRect(player.x, player.y, player.w, player.h);
-}
-
-update();
+// Dibuja la escena inicial
+draw();
