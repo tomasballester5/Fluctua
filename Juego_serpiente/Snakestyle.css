@@ -1,165 +1,142 @@
-:root{
-  --bg:#1b1c1c;
-  --:#1b1c1c;
-  --accent:#e53935;
-  --muted:#9aa3ab;
-  --card:#1b1c1c;
-}
-
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-  background: linear-gradient(180deg,#07080a,#0d1113);
-  color: #e8edf0;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-
-/* Header */
-.site-header{ padding:14px 20px; display:flex; justify-content:space-between; align-items:center; }
-.header-left{ display:flex; align-items:center; gap:12px; }
-.logo{ height:30px; cursor:pointer; }
-.title-group h1{ margin:0; color:var(--accent); letter-spacing:0.6px; font-size:20px; }
-.subtitle{ margin:0; color:var(--muted); font-size:12px; }
-
-.header-right{ display:flex; gap:8px; align-items:center; }
-.icon-btn{ background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.03); padding:8px; border-radius:10px; cursor:pointer; }
-.icon-btn:hover{ color:var(--accent); box-shadow:0 6px 20px rgba(229,43,63,0.08); transform:translateY(-2px); }
-
-/* Layout */
-.game{ width:min(1100px,96vw); display:grid; grid-template-columns: 1fr 320px; gap:16px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:10px; padding:12px; box-shadow:0 12px 30px rgba(0,0,0,0.6); align-items:start; }
-
-.wrap {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 2rem;
-  flex-wrap: nowrap;
-  padding: 1rem;
-}
-
-/* canvas */
-.canvas-wrap {
-  position: relative;
-  border-radius: 10px;
-  padding: 12px;
-  background: linear-gradient(180deg, #0b0c0e, #0f1316);
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* El canvas mantiene tamaño fijo en PC, pero se adapta en móviles */
-canvas {
-  display: block;
-  background: #061015;
-  border-radius: 10px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
-  border: 2px solid rgba(229, 43, 63, 0.08);
-  width: 100%;
-  height: auto;
-  max-width: 600px; /* tamaño máximo en escritorio */
-  aspect-ratio: 1 / 1; /* mantiene proporción cuadrada */
-  height: auto;
-}
-
-
-/* food icon (uses lucide injected svg) */
-.food-icon{ position:absolute; pointer-events:none; width:30px; height:30px; display:flex; align-items:center; justify-content:center; transform:translate(-50%,-50%); }
-
-/* panel */
-.panel{ display:flex; flex-direction:column; gap:12px; padding:6px; }
-.title{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
-.small-logo{ width:72px; border-radius:8px; }
-.badges{ display:flex; flex-direction:column; gap:8px; }
-.badge{ background:var(--card); border-radius:10px; padding:10px; font-weight:700; text-align:center; border:1px solid rgba(255,255,255,0.03); color:var(--muted); }
-.controls{ display:flex; flex-direction:column; gap:10px; }
-.legend{ font-size:13px; color:var(--muted); }
-
-/* buttons */
-.btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); background:transparent; color: #e8edf0; cursor:pointer; font-weight:700; }
-.btn.primary{ background: linear-gradient(180deg,var(--accent), #ff4a59); color:white; border:none; box-shadow: 0 8px 26px rgba(229,43,63,0.12); }
-.btn.secondary{ background:transparent; border:1px solid rgba(255,255,255,0.04); }
-
-/* responsive */
-@media (max-width: 768px) {
-  .wrap {
-    flex-direction: column;
-    align-items: center;
-  }
-
-    .panel {
-    width: 100%;
-    max-width: 400px;
-    margin-top: 1rem;
-    text-align: center;
-  }
- .canvas-wrap {
-    width: 100%;
-  }
-  
-  canvas {
-    width: 90vw;
-    height: 90vw;
-  }
-
-  .gamepad {
-    transform: scale(0.9);
-    margin-top: 1rem;
-  }
-}
-.gamepad {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
+body {
+  margin: 0;
+  background: #030910;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.logo {
+  height: 40px;
+  cursor: pointer;
+}
+
+.top-buttons {
+  display: flex;
   gap: 10px;
-  z-index: 50;
-  user-select: none;
+}
+
+.menu-btn {
+  background: #162029;
+  border: 1px solid #e53935;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menu-btn:hover {
+  background: #e53935;
+}
+
+.scoreboard {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.game {
+  position: relative;
+  margin-top: 10px;
+  border: 2px solid #e53935;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 100%;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #071018;
+}
+
+.food-icon {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.controls {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.controls button {
+  background: #e53935;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.controls button:hover {
+  background: #c62828;
+}
+
+/* 🎮 Gamepad táctil */
+.gamepad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 25px;
+  gap: 8px;
 }
 
 .pad-row {
   display: flex;
-  gap: 50px;
+  justify-content: center;
+  gap: 8px;
 }
 
 .pad-btn {
-  width: 70px;
-  height: 70px;
-  background: rgba(229, 57, 53, 0.1);
-  border: 2px solid rgba(229, 57, 53, 0.4);
-  border-radius: 50%;
-  color: var(--accent);
-  font-size: 26px;
+  background: #162029;
+  color: white;
+  border: 2px solid #e53935;
+  width: 55px;
+  height: 55px;
+  font-size: 24px;
+  border-radius: 12px;
   font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.15s ease;
-  box-shadow: 0 0 10px rgba(229, 57, 53, 0.1);
-  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: 0.15s;
 }
 
 .pad-btn:active {
-  background: var(--accent);
-  color: #fff;
-  transform: scale(0.9);
-  box-shadow: 0 0 20px rgba(229, 57, 53, 0.6);
+  background: #e53935;
 }
 
-/* Mostrar solo en pantallas pequeñas */
-@media (min-width: 769px) {
-  .gamepad {
-    display: none;
+/* Móvil: más grande el gamepad */
+@media (max-width: 600px) {
+  .pad-btn {
+    width: 65px;
+    height: 65px;
+    font-size: 30px;
   }
 }
-
-
-
-
