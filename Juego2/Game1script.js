@@ -262,3 +262,85 @@ function resizeCanvas() {
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
+
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
+
+if (leftBtn && rightBtn) {
+  const touchStart = (btn) => {
+    if (btn === "left") leftPressed = true;
+    if (btn === "right") rightPressed = true;
+  };
+  const touchEnd = (btn) => {
+    if (btn === "left") leftPressed = false;
+    if (btn === "right") rightPressed = false;
+  };
+
+  leftBtn.addEventListener("touchstart", () => touchStart("left"));
+  leftBtn.addEventListener("touchend", () => touchEnd("left"));
+  rightBtn.addEventListener("touchstart", () => touchStart("right"));
+  rightBtn.addEventListener("touchend", () => touchEnd("right"));
+}
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+// Ajuste dinámico del canvas
+function resizeCanvas() {
+  canvas.width = Math.min(window.innerWidth * 0.9, 800);
+  canvas.height = canvas.width * 0.6;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+// Variables base (puedes conservar las tuyas)
+let player = { x: canvas.width / 2, y: canvas.height - 50, w: 50, h: 10, speed: 6 };
+let leftPressed = false;
+let rightPressed = false;
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") leftPressed = true;
+  if (e.key === "ArrowRight") rightPressed = true;
+});
+document.addEventListener("keyup", (e) => {
+  if (e.key === "ArrowLeft") leftPressed = false;
+  if (e.key === "ArrowRight") rightPressed = false;
+});
+
+// 🔻 Controles táctiles
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
+
+if (leftBtn && rightBtn) {
+  const touchStart = (btn) => {
+    if (btn === "left") leftPressed = true;
+    if (btn === "right") rightPressed = true;
+  };
+  const touchEnd = (btn) => {
+    if (btn === "left") leftPressed = false;
+    if (btn === "right") rightPressed = false;
+  };
+
+  leftBtn.addEventListener("touchstart", () => touchStart("left"));
+  leftBtn.addEventListener("touchend", () => touchEnd("left"));
+  rightBtn.addEventListener("touchstart", () => touchStart("right"));
+  rightBtn.addEventListener("touchend", () => touchEnd("right"));
+}
+
+// 🔹 Lógica principal del juego (mantiene tu jugabilidad)
+function update() {
+  if (leftPressed) player.x -= player.speed;
+  if (rightPressed) player.x += player.speed;
+
+  player.x = Math.max(0, Math.min(canvas.width - player.w, player.x));
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawPlayer();
+  requestAnimationFrame(update);
+}
+
+function drawPlayer() {
+  ctx.fillStyle = "#e53935";
+  ctx.fillRect(player.x, player.y, player.w, player.h);
+}
+
+update();
