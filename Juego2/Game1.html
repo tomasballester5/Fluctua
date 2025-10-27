@@ -3,17 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game 1</title>
+  <title>Brick Breaker</title>
   <link rel="stylesheet" href="Game1style.css">
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Logo" class="logo" />
-    <h1>GAME 1</h1>
+    <!-- 🔗 Logo que lleva a la página principal -->
+    <img src="Fluctua_Logo.png" alt="Fluctua Logo" class="logo" id="homeLogo" />
+    <h1>BRICK BREAKER</h1>
   </header>
 
   <main class="game-container">
     <canvas id="gameCanvas"></canvas>
+
     <div class="sidebar">
       <div class="info-box">
         <p>Puntaje: <span id="score">0</span></p>
@@ -28,11 +30,18 @@
     </div>
   </main>
 
-  <!-- 🔻 Joystick táctil solo visible en celular -->
+  <!-- 🎮 Joystick táctil visible solo en celulares -->
   <div id="joystick" class="joystick">
     <button id="leftBtn" class="joy-btn">⟵</button>
     <button id="rightBtn" class="joy-btn">⟶</button>
   </div>
+
+  <script>
+    // 🔗 Redirección al hacer clic en el logo
+    document.getElementById("homeLogo").addEventListener("click", () => {
+      window.location.href = "../principal.html";
+    });
+  </script>
 
   <script src="Game1script.js"></script>
 </body>
