@@ -35,12 +35,16 @@ let ball = {
 };
 
 const brickRowCount = 5;
-const brickColumnCount = 9;
-const brickWidth = scale(60);
-const brickHeight = scale(20);
-const brickPadding = scale(10);
-const brickOffsetTop = scale(30);
-const brickOffsetLeft = scale(35);
+const brickColumnCount = 8;
+
+// Se ajustan al tamaño del canvas
+const brickWidth = canvas.width / brickColumnCount - 10;
+const brickHeight = canvas.height * 0.05; // 5% del alto total
+const brickPadding = 8;
+
+// Margen superior para que no queden tan cerca del paddle
+const brickOffsetTop = canvas.height * 0.1;
+const brickOffsetLeft = (canvas.width - (brickColumnCount * (brickWidth + brickPadding))) / 2;
 
 
 let score = 0;
@@ -274,5 +278,6 @@ document.getElementById("resetBtn").addEventListener("click", resetGame);
 
 // Dibuja escena inicial
 draw();
+
 
 
