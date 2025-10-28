@@ -23,6 +23,9 @@ const paddle = {
   height: scale(15),
   speed: scale(7),
   dx: 0
+  let paddleWidth = canvas.width * 0.18;
+paddleWidth = Math.max(60, Math.min(paddleWidth, 120));
+
 };
 
 let ball = {
@@ -37,13 +40,17 @@ let ball = {
 const brickRowCount = 5;
 const brickColumnCount = 8;
 
-// Se ajustan al tamaño del canvas
-const brickWidth = canvas.width / brickColumnCount - 10;
-const brickHeight = canvas.height * 0.05; // 5% del alto total
+// 🔧 Tamaño adaptable con límites
+let brickWidth = canvas.width / brickColumnCount - 10;
+brickWidth = Math.max(50, Math.min(brickWidth, 90)); // mínimo 50px, máximo 90px
+
+let brickHeight = canvas.height * 0.05;
+brickHeight = Math.max(12, Math.min(brickHeight, 25)); // mínimo 12px, máximo 25px
+
 const brickPadding = 8;
 
-// Margen superior para que no queden tan cerca del paddle
-const brickOffsetTop = canvas.height * 0.1;
+// 🔼 Margen superior proporcional
+const brickOffsetTop = Math.max(50, canvas.height * 0.08);
 const brickOffsetLeft = (canvas.width - (brickColumnCount * (brickWidth + brickPadding))) / 2;
 
 
@@ -278,6 +285,7 @@ document.getElementById("resetBtn").addEventListener("click", resetGame);
 
 // Dibuja escena inicial
 draw();
+
 
 
 
