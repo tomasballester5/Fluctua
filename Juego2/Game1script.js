@@ -1,41 +1,47 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+// 🧩 Mantiene canvas físico = tamaño visible
 function resizeCanvas() {
-  const maxWidth = Math.min(window.innerWidth * 0.9, 600);
-  canvas.width = maxWidth;
-  canvas.height = maxWidth * 0.66;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
 }
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
+// Escalas relativas
+function scale(val) {
+  return val * (canvas.width / 600); // 600px es tamaño base
+}
 
 // Variables base
 const paddle = {
-  x: canvas.width / 2 - 50,
-  y: canvas.height - 30,
-  width: 100,
-  height: 15,
-  speed: 7,
+  x: canvas.width / 2 - scale(50),
+  y: canvas.height - scale(30),
+  width: scale(100),
+  height: scale(15),
+  speed: scale(7),
   dx: 0
 };
 
 let ball = {
   x: canvas.width / 2,
-  y: canvas.height - 45,
-  size: 10,
-  speed: 4,
-  dx: 4,
-  dy: -4
+  y: canvas.height - scale(45),
+  size: scale(10),
+  speed: scale(4),
+  dx: scale(4),
+  dy: -scale(4)
 };
 
 const brickRowCount = 5;
 const brickColumnCount = 9;
-const brickWidth = 60;
-const brickHeight = 20;
-const brickPadding = 10;
-const brickOffsetTop = 30;
-const brickOffsetLeft = 35;
+const brickWidth = scale(60);
+const brickHeight = scale(20);
+const brickPadding = scale(10);
+const brickOffsetTop = scale(30);
+const brickOffsetLeft = scale(35);
+
 
 let score = 0;
 let lives = 3;
@@ -268,4 +274,5 @@ document.getElementById("resetBtn").addEventListener("click", resetGame);
 
 // Dibuja escena inicial
 draw();
+
 
