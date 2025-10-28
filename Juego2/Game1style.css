@@ -53,8 +53,8 @@ canvas {
   border-radius: 10px;
   width: 90vw;
   max-width: 600px;
-  height: auto;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 4 / 3; /* mantiene la proporción */
+  display: block;
 }
 
 .sidebar {
